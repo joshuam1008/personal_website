@@ -1,0 +1,23 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'a'>;
+
+const { href = '#', class: className, ...props } = Astro.props as Props;
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const normalisedHref = typeof href === 'string' ? href.replace(/\/$/, '') || '/' : '/';
+const isActive =
+  normalisedHref === '/' ? currentPath === '/' : currentPath.startsWith(normalisedHref);
+---
+
+<a
+  href={href}
+  class:list={[
+    'nav-link transition-all duration-200',
+    className,
+    { 'bg-white/20 text-white shadow-lg shadow-indigo-500/30': isActive },
+  ]}
+  {...props}
+>
+  <slot />
+</a>

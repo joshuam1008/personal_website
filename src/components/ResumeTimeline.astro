@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  items: CollectionEntry<'resume'>[];
+  title: string;
+}
+
+const { items, title } = Astro.props as Props;
+const sorted = [...items].sort((a, b) => b.data.start.localeCompare(a.data.start));
+---
+
+<section class="space-y-8">
+  <h2 class="text-2xl font-semibold text-white md:text-3xl">{title}</h2>
+  <ol class="relative space-y-10 before:absolute before:left-3 before:top-1 before:h-full before:w-px before:bg-gradient-to-b before:from-white/30 before:via-white/10 before:to-transparent md:space-y-12">
+    {sorted.map((item) => (
+      <li class="relative ml-8 space-y-3">
+        <span class="absolute -left-8 mt-1 flex h-6 w-6 items-center justify-center rounded-full border border-white/40 bg-neutral-900 text-xs font-semibold text-neutral-100">
+          •
+        </span>
+        <div class="flex flex-col gap-1">
+          <p class="text-sm uppercase tracking-[0.3em] text-neutral-500">
+            {item.data.organization}
+          </p>
+          <h3 class="text-xl font-semibold text-white">{item.data.title}</h3>
+        </div>
+        <div class="flex flex-wrap items-center gap-4 text-xs text-neutral-400">
+          <span>
+            <FormattedDate date={new Date(`${item.data.start}-01`)} class="text-xs uppercase" />
+            {item.data.end && (
+              <>
+                {' '}
+                –
+                {' '}
+                <FormattedDate date={new Date(`${item.data.end}-01`)} class="text-xs uppercase" />
+              </>
+            )}
+            {!item.data.end && <span> – Present</span>}
+          </span>
+          {item.data.location && <span>{item.data.location}</span>}
+          {item.data.link && (
+            <a class="text-accent underline-offset-4 hover:underline" href={item.data.link} target="_blank" rel="noreferrer">
+              Details
+            </a>
+          )}
+        </div>
+        {item.data.bullets.length > 0 && (
+          <ul class="space-y-2 text-sm text-neutral-300">
+            {item.data.bullets.map((bullet) => (
+              <li>{bullet}</li>
+            ))}
+          </ul>
+        )}
+      </li>
+    ))}
+  </ol>
+</section>

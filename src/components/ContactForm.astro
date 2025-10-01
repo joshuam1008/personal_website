@@ -1,0 +1,78 @@
+---
+const formEndpoint = import.meta.env.PUBLIC_FORM_ENDPOINT;
+const isConfigured = Boolean(formEndpoint);
+const mailtoFallback = 'mailto:hello@joshua-mason.com';
+---
+
+<section class="container mt-24" data-reveal>
+  {isConfigured ? (
+    <div class="glass-card p-10">
+      <form action={formEndpoint} method="POST" class="space-y-6">
+        <div class="space-y-3">
+          <span class="badge">Contact</span>
+          <h2 class="text-3xl font-semibold text-white md:text-4xl">Let’s build something together</h2>
+          <p class="text-lg text-neutral-300">
+            Share a few details about what you’re working on. I reply within two business days.
+          </p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="space-y-2 text-sm font-semibold text-neutral-200">
+            Name
+            <input
+              type="text"
+              name="name"
+              required
+              class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
+            />
+          </label>
+          <label class="space-y-2 text-sm font-semibold text-neutral-200">
+            Email
+            <input
+              type="email"
+              name="email"
+              required
+              class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
+            />
+          </label>
+        </div>
+        <label class="space-y-2 text-sm font-semibold text-neutral-200">
+          What are you hoping to explore?
+          <textarea
+            name="message"
+            rows={5}
+            required
+            class="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-neutral-100 placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
+          ></textarea>
+        </label>
+        <input type="text" name="company" class="hidden" aria-hidden="true" tabindex="-1" />
+        <button
+          type="submit"
+          class="inline-flex items-center justify-center rounded-full bg-accent px-8 py-3 text-sm font-semibold text-accent-foreground shadow-lg shadow-indigo-500/40 transition hover:-translate-y-0.5"
+        >
+          Send message
+        </button>
+      </form>
+    </div>
+  ) : (
+    <div class="glass-card flex flex-col items-start gap-4 p-10">
+      <span class="badge">Contact</span>
+      <h2 class="text-3xl font-semibold text-white md:text-4xl">Prefer email?</h2>
+      <p class="text-lg text-neutral-300">
+        I haven’t configured the form endpoint yet, but you can reach me directly at
+        <a class="ml-2 text-accent underline-offset-4 hover:underline" href={mailtoFallback}>
+          hello@joshua-mason.com
+        </a>
+        .
+      </p>
+      <a
+        href={mailtoFallback}
+        class="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-neutral-200 transition hover:border-white/40 hover:text-white"
+      >
+        Open email
+      </a>
+      <p class="text-xs text-neutral-500">
+        Set <code>PUBLIC_FORM_ENDPOINT</code> in your environment to enable the embedded contact form.
+      </p>
+    </div>
+  )}
+</section>

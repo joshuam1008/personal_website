@@ -1,0 +1,45 @@
+---
+title: "Designing My 2025 Personal Site with Astro Islands"
+description: "Notes on how I'm shaping v1 of my new digital home using Astro, Tailwind, and a sprinkle of motion."
+pubDate: 2025-09-21
+updatedDate: 2025-10-01
+heroImage: ../../assets/blog-placeholder-3.jpg
+heroImageAlt: "Gradient UI mockup for the personal site hero section"
+featured: true
+tags: ["astro", "personal-site", "frontend"]
+readingTime: "6 min read"
+---
+
+I wanted this rebuild to feel more like a personal studio than a static resume. Astro gives me the right balance:
+
+- **Authoring stays Markdown-first.** I can rough out a post or a project write-up without leaving my editor.
+- **Client JavaScript is opt-in.** Most sections render to static HTML, but I can hydrate a React island for more playful interactions.
+- **Performance is easy to protect.** Tailwind keeps the styling consistent while Astro handles asset bundling and image optimization.
+
+## Making the hero feel alive
+
+For the landing section I'm sketching out a layered scene:
+
+1. A glassmorphic card that introduces me and links to the essentials (resume, GitHub, writing).
+2. A small React island powered by `framer-motion` to animate badges drifting in and a parallax glow.
+3. Subtle scroll-triggered reveals using the lightweight `motion` utilities so that the hero text and CTA slide into view.
+
+It's a lot of polish in a small surface area, which is exactly where I want to spend motion budget.
+
+## Structuring content for growth
+
+The new `/src/content` directory handles everything:
+
+- `blog/` for long-form updates like this.
+- `projects/` for portfolio entries with metadata, tags, and launch dates.
+- `resume/` for timeline data that feeds the experience and education sections.
+
+Collections give me type safety in frontmatter, so a missing field or invalid link shows up instantly during development.
+
+## Next iteration goals
+
+- Compose a project gallery that highlights three flagship builds with animated hover cards.
+- Ship the first writing pieces using MDX so I can embed live demos when needed.
+- Wire up MiniSearch for client-side search across posts and projects.
+
+Each commit pushes straight to GitHub Pages, so once the hero and lists feel right I can iterate publicly. Astro makes shipping the new version the easy part—the design taste is the real work.

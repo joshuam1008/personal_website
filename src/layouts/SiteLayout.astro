@@ -1,0 +1,44 @@
+---
+import type { ImageMetadata } from 'astro';
+import BaseHead from '@components/BaseHead.astro';
+import Footer from '@components/Footer.astro';
+import Header from '@components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import revealEntry from '../scripts/init-reveal.ts?url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: ImageMetadata;
+}
+
+const { title = SITE_TITLE, description = SITE_DESCRIPTION, image } = Astro.props as Props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+    {import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN && (
+      <script
+        is:inline
+        defer
+        data-domain={import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN}
+        src="https://plausible.io/js/script.js"
+      ></script>
+    )}
+  </head>
+  <body class="min-h-screen bg-[#0b1120] text-neutral-100">
+    <div class="relative">
+      <div class="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.12),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(236,72,153,0.12),_transparent_55%)]" />
+      <div class="relative flex min-h-screen flex-col">
+        <Header />
+        <main class="flex-1 pb-24">
+          <slot />
+        </main>
+        <Footer />
+      </div>
+    </div>
+    <script type="module" src={revealEntry}></script>
+  </body>
+</html>

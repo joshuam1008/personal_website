@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import ResumeTimeline from '@components/ResumeTimeline.astro';
+import SiteLayout from '@layouts/SiteLayout.astro';
+
+const resumeItems = await getCollection('resume');
+const experience = resumeItems.filter((item) => item.data.section === 'experience');
+const education = resumeItems.filter((item) => item.data.section === 'education');
+---
+
+<SiteLayout title="About" description="Who I am, how I work, and what I’m excited to build next.">
+  <section class="container mt-20 space-y-12" data-reveal>
+    <header class="max-w-3xl space-y-6">
+      <span class="badge">About</span>
+      <h1 class="headline">Hi, I’m Joshua Mason.</h1>
+      <p class="text-lg text-neutral-300">
+        I’m a machine learning engineer obsessed with pairing smart systems with thoughtful design. Over the past few
+        years I’ve led teams shipping search and recommendation features, helped startups navigate the messy middle of
+        experimentation, and built tooling that keeps humans in the loop.
+      </p>
+      <p class="text-lg text-neutral-300">
+        My happiest days are spent collaborating across disciplines—product, design, research, and engineering—to get
+        ideas into people’s hands quickly. Whether it’s guiding a roadmap, prototyping an interaction, or tuning a
+        model, I’m motivated by seeing meaningful impact land.
+      </p>
+    </header>
+
+    <div class="grid gap-12 lg:grid-cols-[60%_auto]">
+      <ResumeTimeline items={experience} title="Experience" />
+      {education.length > 0 && <ResumeTimeline items={education} title="Education" />}
+    </div>
+  </section>
+</SiteLayout>

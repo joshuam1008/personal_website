@@ -1,0 +1,16 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-16 border-t border-white/5 bg-black/20">
+  <div class="container flex flex-col gap-8 py-12 text-sm text-neutral-300 md:flex-row md:items-center md:justify-between">
+    <p class="max-w-md text-balance leading-relaxed">
+      © {year} Joshua Mason. Built with Astro, Tailwind, and a little bit of motion. Always iterating.
+    </p>
+    <div class="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em] text-neutral-500">
+      <span>Open to collaborations</span>
+      <span class="hidden h-1 w-1 rounded-full bg-neutral-500 md:inline-block" aria-hidden="true"></span>
+      <span>hello@joshua-mason.com</span>
+    </div>
+  </div>
+</footer>
