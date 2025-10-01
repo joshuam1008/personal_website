@@ -7,15 +7,9 @@ import ProjectCard from '@components/ProjectCard.astro';
 import ResumeTimeline from '@components/ResumeTimeline.astro';
 import SearchSection from '@components/SearchSection.astro';
 import SiteLayout from '@layouts/SiteLayout.astro';
+import { sortProjects } from '@lib/sort-projects';
 
-const projects = (await getCollection('projects')).sort((a, b) => {
-  if (a.data.sortOrder && b.data.sortOrder) {
-    return a.data.sortOrder - b.data.sortOrder;
-  }
-  if (a.data.sortOrder) return -1;
-  if (b.data.sortOrder) return 1;
-  return b.data.launchedAt.getTime() - a.data.launchedAt.getTime();
-});
+const projects = sortProjects(await getCollection('projects'));
 
 const featuredProjects = projects.filter((project) => project.data.featured).slice(0, 3);
 const otherProjects = projects.filter((project) => !project.data.featured);

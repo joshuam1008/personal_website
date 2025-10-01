@@ -25,5 +25,6 @@ export default defineConfig({
     '@content': './src/content',
     '@styles': './src/styles',
     '@lib': './src/lib',
+    '@config': './src/config',
   },
 });

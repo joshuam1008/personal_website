@@ -1,4 +1,6 @@
 import { motion, type Variants } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { getAnimationConfig } from '@config/animations';
 
 const highlights = [
   'Agentic AI (LLM orchestration)',
@@ -6,6 +8,8 @@ const highlights = [
   'NLP classification & dataset design',
   'Cloud ML (SageMaker, Spark)',
 ];
+
+const quoteText = '"I care about how models meet people. The tooling is fun, but the experience is the product."';
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -43,7 +47,31 @@ const floatingVariants: Variants = {
   },
 };
 
+const letterVariants: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 1.5 + index * 0.02, duration: 0.3 },
+  }),
+};
+
 export default function HeroMotion() {
+  const [enableRipple, setEnableRipple] = useState(true);
+
+  useEffect(() => {
+    const config = getAnimationConfig();
+    setEnableRipple(config.enableQuoteRipple);
+
+    const handleConfigChange = (e: CustomEvent) => {
+      setEnableRipple(e.detail.enableQuoteRipple);
+    };
+
+    window.addEventListener('animation-config-changed', handleConfigChange as EventListener);
+    return () => {
+      window.removeEventListener('animation-config-changed', handleConfigChange as EventListener);
+    };
+  }, []);
   return (
     <motion.div
       variants={cardVariants}
@@ -55,7 +83,7 @@ export default function HeroMotion() {
         variants={glowVariants}
         initial="initial"
         animate="animate"
-        className="pointer-events-none absolute -top-32 right-0 h-64 w-64 rounded-full bg-gradient-to-br from-indigo-500/40 via-sky-500/30 to-transparent blur-3xl"
+        className="pointer-events-none absolute -top-32 right-0 h-64 w-64 rounded-full bg-gradient-to-br from-indigo-500/40 via-indigo-500/30 to-transparent blur-3xl"
       />
 
       <motion.div
@@ -83,7 +111,7 @@ export default function HeroMotion() {
                 animate="visible"
                 className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 mix-blend-screen"
               >
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-500/30 text-xs font-semibold text-indigo-100">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-500/30 text-xs font-semibold text-white">
                   {index + 1}
                 </span>
                 <span>{item}</span>
@@ -93,7 +121,22 @@ export default function HeroMotion() {
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-neutral-300">
-          "I care about how models meet people. The tooling is fun, but the experience is the product."
+          {enableRipple ? (
+            quoteText.split('').map((char, index) => (
+              <motion.span
+                key={`${char}-${index}`}
+                custom={index}
+                variants={letterVariants}
+                initial="hidden"
+                animate="visible"
+                style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+              >
+                {char}
+              </motion.span>
+            ))
+          ) : (
+            quoteText
+          )}
         </div>
       </div>
     </motion.div>

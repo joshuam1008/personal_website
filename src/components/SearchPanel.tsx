@@ -1,28 +1,9 @@
 import MiniSearch from 'minisearch';
-import type { Options, SearchResult } from 'minisearch';
+import type { SearchResult } from 'minisearch';
 import { useEffect, useMemo, useState } from 'react';
-
-type SearchDoc = {
-  id: string;
-  title: string;
-  summary: string;
-  tags: string[];
-  type: 'Project' | 'Writing';
-  url: string;
-  content: string;
-};
+import { SEARCH_CONFIG, type SearchDoc } from '@lib/search-config';
 
 type Entry = SearchResult | SearchDoc;
-
-const miniSearchOptions: Options<SearchDoc> = {
-  fields: ['title', 'summary', 'content', 'tags'],
-  storeFields: ['title', 'summary', 'tags', 'type', 'url'],
-  searchOptions: {
-    boost: { title: 4, tags: 2 },
-    fuzzy: 0.2,
-    prefix: true,
-  },
-};
 
 function useSearch() {
   const [query, setQuery] = useState('');
@@ -31,7 +12,7 @@ function useSearch() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const miniSearch = useMemo(() => new MiniSearch(miniSearchOptions), []);
+  const miniSearch = useMemo(() => new MiniSearch(SEARCH_CONFIG), []);
 
   useEffect(() => {
     const controller = new AbortController();
