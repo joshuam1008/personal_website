@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '@components/FormattedDate.astro';
+import GiscusComments from '@components/GiscusComments.astro';
+import SiteLayout from './SiteLayout.astro';
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, pubDate, updatedDate, heroImage, heroImageAlt = '' } =
+  Astro.props as Props;
+---
+
+<SiteLayout title={title} description={description} image={heroImage}>
+  <article class="container mt-20 max-w-3xl" data-reveal>
+    <header class="space-y-6 text-center">
+      <p class="text-xs uppercase tracking-[0.3em] text-neutral-500">Published</p>
+      <div class="flex items-center justify-center gap-3 text-sm text-neutral-300">
+        <FormattedDate date={pubDate} class="font-medium text-neutral-200" />
+        {updatedDate && (
+          <span class="text-neutral-500">
+            • Updated <FormattedDate date={updatedDate} class="font-normal text-neutral-300" />
+          </span>
+        )}
+      </div>
+      <h1 class="headline text-balance">{title}</h1>
+      <p class="text-lg text-neutral-300">{description}</p>
+    </header>
+
+    {heroImage && (
+      <div class="relative mt-12 overflow-hidden rounded-3xl border border-white/15 bg-white/5">
+        <Image
+          src={heroImage!}
+          alt={heroImageAlt || title}
+          class="h-full w-full object-cover"
+          loading="lazy"
+        />
+      </div>
+    )}
+
+    <div class="prose-content mt-12 space-y-8">
+      <slot />
+    </div>
+
+    <GiscusComments />
+  </article>
+</SiteLayout>

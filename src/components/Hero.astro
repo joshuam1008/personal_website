@@ -1,0 +1,37 @@
+---
+import HeroMotion from './HeroMotion';
+---
+
+<section class="container relative flex flex-col gap-12 pt-24 pb-20 lg:flex-row lg:items-center">
+  <div class="flex-1 space-y-8">
+    <span class="badge">Machine learning engineer · Builder · Storyteller</span>
+    <h1 class="headline">
+      Shipping search experiences that feel fast, personal, and purposeful.
+    </h1>
+    <p class="text-lg text-neutral-300 md:text-xl">
+      I design and deliver machine learning systems end-to-end—from product discovery and rapid
+      prototyping to deployed models serving millions of queries. This site collects my writing,
+      experiments, and the projects I’m proud of.
+    </p>
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <a
+        class="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground shadow-lg shadow-indigo-500/50 transition hover:-translate-y-0.5 hover:shadow-2xl"
+        href="/Joshua-Mason-Resume.pdf"
+      >
+        View resume
+      </a>
+      <a
+        class="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-neutral-200 transition hover:border-white/40 hover:text-white"
+        href="https://github.com/joshua-mason"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Explore GitHub
+      </a>
+    </div>
+  </div>
+
+  <div class="flex-1">
+    <HeroMotion client:load />
+  </div>
+</section>

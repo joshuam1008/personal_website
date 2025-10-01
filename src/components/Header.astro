@@ -1,0 +1,61 @@
+---
+import { Github, Linkedin, Mail } from 'lucide-astro';
+import { SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Writing' },
+  { href: '/about', label: 'About' },
+];
+
+const socialLinks = [
+  {
+    href: 'https://github.com/joshua-mason',
+    label: 'GitHub profile',
+    icon: Github,
+  },
+  {
+    href: 'https://www.linkedin.com/in/joshua-mason',
+    label: 'LinkedIn profile',
+    icon: Linkedin,
+  },
+  {
+    href: 'mailto:hello@joshua-mason.com',
+    label: 'Email Joshua',
+    icon: Mail,
+  },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-white/10 bg-surface/80 backdrop-blur-xl">
+  <div class="container flex items-center justify-between gap-6 py-4">
+    <a class="flex items-center gap-3 text-base font-semibold text-white transition hover:opacity-80" href="/">
+      <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-lg font-bold text-white shadow-lg shadow-indigo-500/40">
+        JM
+      </span>
+      <span class="tracking-tight">{SITE_TITLE}</span>
+    </a>
+
+    <nav class="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1.5 md:flex">
+      {navItems.map((item) => (
+        <HeaderLink href={item.href}>{item.label}</HeaderLink>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-1.5">
+      {socialLinks.map(({ href, label, icon: Icon }) => (
+        <a
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-neutral-200 transition hover:border-white/30 hover:text-white"
+          aria-label={label}
+        >
+          <Icon class="h-4 w-4" />
+        </a>
+      ))}
+    </div>
+  </div>
+</header>

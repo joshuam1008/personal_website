@@ -1,0 +1,121 @@
+---
+import { getCollection } from 'astro:content';
+import ContactForm from '@components/ContactForm.astro';
+import Hero from '@components/Hero.astro';
+import PostCard from '@components/PostCard.astro';
+import ProjectCard from '@components/ProjectCard.astro';
+import ResumeTimeline from '@components/ResumeTimeline.astro';
+import SearchSection from '@components/SearchSection.astro';
+import SiteLayout from '@layouts/SiteLayout.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => {
+  if (a.data.sortOrder && b.data.sortOrder) {
+    return a.data.sortOrder - b.data.sortOrder;
+  }
+  if (a.data.sortOrder) return -1;
+  if (b.data.sortOrder) return 1;
+  return b.data.launchedAt.getTime() - a.data.launchedAt.getTime();
+});
+
+const featuredProjects = projects.filter((project) => project.data.featured).slice(0, 3);
+const otherProjects = projects.filter((project) => !project.data.featured);
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+const resumeItems = await getCollection('resume');
+const experience = resumeItems.filter((item) => item.data.section === 'experience').slice(0, 2);
+const highlights = resumeItems.filter((item) => item.data.section === 'highlight');
+---
+
+<SiteLayout>
+  <Hero />
+
+  <section class="container mt-16 space-y-10" data-reveal>
+    <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+      <div class="space-y-4">
+        <span class="badge">Featured work</span>
+        <h2 class="text-3xl font-semibold text-white md:text-4xl">Projects I’m proud of</h2>
+        <p class="max-w-2xl text-lg text-neutral-300">
+          From production ML systems to playful prototypes, these are the builds that shaped how I think about
+          shipping products.
+        </p>
+      </div>
+      <a
+        href="/projects"
+        class="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-neutral-200 transition hover:border-white/40 hover:text-white"
+      >
+        Browse all projects →
+      </a>
+    </div>
+
+    <div class="grid gap-10">
+      {featuredProjects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+
+    {otherProjects.length > 0 && (
+      <div class="grid gap-6 md:grid-cols-2">
+        {otherProjects.slice(0, 2).map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    )}
+  </section>
+
+  <section class="container mt-24 space-y-10" data-reveal>
+    <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+      <div class="space-y-4">
+        <span class="badge">Writing</span>
+        <h2 class="text-3xl font-semibold text-white md:text-4xl">
+          Sharing notes from the field
+        </h2>
+        <p class="max-w-2xl text-lg text-neutral-300">
+          Essays and changelog entries on relevance, product-thinking for ML teams, and the occasional
+          infrastructure story.
+        </p>
+      </div>
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-neutral-200 transition hover:border-white/40 hover:text-white"
+      >
+        Read the blog →
+      </a>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3">
+      {posts.map((post) => (
+        <PostCard post={post} />
+      ))}
+    </div>
+  </section>
+
+  <section class="container mt-24 grid gap-12 lg:grid-cols-[60%_auto]" data-reveal>
+    <div class="space-y-8">
+      <span class="badge">Experience</span>
+      <ResumeTimeline items={experience} title="Recent roles" />
+    </div>
+
+    {highlights.length > 0 && (
+      <aside class="glass-card space-y-6 p-8">
+        <h3 class="text-lg font-semibold text-white">Highlights</h3>
+        <ul class="space-y-4 text-sm text-neutral-300">
+          {highlights.map((highlight) => (
+            <li class="space-y-1">
+              <p class="font-semibold text-neutral-100">{highlight.data.title}</p>
+              <p class="text-neutral-400">{highlight.data.organization}</p>
+              <p>{highlight.data.bullets[0]}</p>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+  </section>
+
+  <SearchSection />
+
+  <ContactForm />
+</SiteLayout>

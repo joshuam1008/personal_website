@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props as Props;
+const { data } = post;
+const hero = data.heroImage;
+---
+
+<article class="glass-card flex h-full flex-col overflow-hidden">
+  {hero && (
+    <div class="group relative block aspect-[5/3] overflow-hidden border-b border-white/10">
+      <Image
+        src={hero}
+        alt={data.heroImageAlt || `${data.title} cover image`}
+        class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 transition group-hover:opacity-100" />
+    </div>
+  )}
+  <div class="flex flex-1 flex-col gap-4 p-8">
+    <div class="flex items-center justify-between text-xs uppercase tracking-[0.25em] text-neutral-500">
+      <FormattedDate date={data.pubDate} class="font-medium tracking-[0.2em]" />
+      {data.tags.length > 0 && <span>{data.tags[0]}</span>}
+    </div>
+    <h3 class="text-2xl font-semibold text-white">{data.title}</h3>
+    <p class="text-sm text-neutral-300">{data.description}</p>
+    <a
+      href={`/blog/${post.slug}/`}
+      class="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-accent transition hover:text-white"
+    >
+      Read story
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>

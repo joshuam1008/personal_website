@@ -1,0 +1,24 @@
+---
+import SearchPanel from './SearchPanel';
+---
+
+<section
+  class="container mt-24 grid gap-10 rounded-3xl border border-white/10 bg-white/5 p-10 lg:grid-cols-[1fr_1.1fr]"
+  data-reveal
+>
+  <div class="space-y-6">
+    <span class="badge">Search</span>
+    <h2 class="text-3xl font-semibold text-white md:text-4xl">Find anything in seconds</h2>
+    <p class="text-lg text-neutral-300">
+      Instantly filter through projects and writing. Powered by a static MiniSearch index that ships with the build,
+      so results stay fast—no external services required.
+    </p>
+    <p class="text-sm text-neutral-500">
+      Tip: try queries like <strong class="text-neutral-100">search</strong>, <strong class="text-neutral-100">astro</strong>, or
+      <strong class="text-neutral-100">ml</strong> to jump to relevant entries.
+    </p>
+  </div>
+  <div class="glass-card p-6">
+    <SearchPanel client:idle />
+  </div>
+</section>

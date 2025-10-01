@@ -1,0 +1,33 @@
+---
+title: "Personal Website Refresh"
+summary: "A performant Astro build that blends static content with animated islands to showcase my work."
+heroImage: ../../assets/blog-placeholder-4.jpg
+heroImageAlt: "Hero concept for the personal website redesign"
+launchedAt: 2025-10-01
+featured: true
+tags: ["astro", "tailwind", "design-system"]
+links:
+  - label: "Live site"
+    href: "https://www.joshua-mason.com"
+  - label: "Source"
+    href: "https://github.com/joshua-mason/personal_website"
+sortOrder: 1
+---
+
+The 2025 refresh focuses on motion-forward storytelling without sacrificing load time. Astro's island architecture keeps most pages static, while targeted React components add polish where it matters.
+
+## Highlights
+
+- Tailwind-powered design system with glassmorphism accents, layered gradients, and dark-first theming.
+- Hero section animated with `framer-motion`, including staggered badges and a glowing backdrop that reacts to cursor position.
+- Client-side MiniSearch index so visitors can filter posts and projects instantly.
+- GitHub Actions pipeline that builds on pushes to `main` and publishes straight to GitHub Pages with my custom domain.
+
+## Stack
+
+- Astro 5 + MDX collections for blog posts, projects, and resume timeline data.
+- Tailwind CSS + typography plugin for consistent writing and component styling.
+- Motion One utilities for scroll reveals, with a React island dedicated to the hero animation.
+- Formspree for a zero-backend contact form and Giscus for optional comments on long-form posts.
+
+The result is a résumé website that feels purposeful, handles future content growth, and stays easy to maintain.

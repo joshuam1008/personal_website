@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --page-bg: 12 14 24;
+    --page-surface: 17 24 39;
+    --page-card: 30 41 59;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-[#0b1120] text-neutral-100 font-sans antialiased;
+    background-image: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15), transparent 55%),
+      radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.2), transparent 55%),
+      radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.12), transparent 50%);
+    background-attachment: fixed;
+  }
+
+  main {
+    @apply min-h-screen;
+  }
+
+  ::selection {
+    @apply bg-accent text-accent-foreground;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-glass;
+  }
+
+  .nav-link {
+    @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-neutral-200 transition hover:text-white hover:bg-white/10;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs uppercase tracking-wide text-neutral-200;
+  }
+
+  .headline {
+    @apply text-balance text-4xl font-semibold tracking-tight text-white md:text-5xl lg:text-6xl;
+  }
+
+  .prose-content {
+    @apply prose prose-invert prose-lg prose-a:text-accent prose-a:no-underline hover:prose-a:underline max-w-none;
+  }
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}

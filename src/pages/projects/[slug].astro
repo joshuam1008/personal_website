@@ -1,0 +1,79 @@
+---
+import { Image } from 'astro:assets';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import FormattedDate from '@components/FormattedDate.astro';
+import SiteLayout from '@layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: project,
+  }));
+}
+
+type Props = CollectionEntry<'projects'>;
+
+const project = Astro.props as Props;
+const { Content } = await render(project);
+const hero = project.data.heroImage;
+const primaryLink = project.data.links[0];
+---
+
+<SiteLayout title={project.data.title} description={project.data.summary} image={hero}>
+  <article class="container mt-20 max-w-4xl space-y-12" data-reveal>
+    <header class="space-y-6 text-center">
+      <span class="badge">Project</span>
+      <h1 class="headline">{project.data.title}</h1>
+      <p class="text-lg text-neutral-300">{project.data.summary}</p>
+      <div class="flex items-center justify-center gap-4 text-sm text-neutral-400">
+        <span class="uppercase tracking-[0.25em] text-neutral-500">Launched</span>
+        <FormattedDate date={project.data.launchedAt} class="text-neutral-200" />
+      </div>
+      {primaryLink && (
+        <a
+          href={primaryLink.href}
+          target={primaryLink.href.startsWith('http') ? '_blank' : undefined}
+          rel={primaryLink.href.startsWith('http') ? 'noreferrer' : undefined}
+          class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-2 text-sm font-semibold text-accent-foreground shadow-lg shadow-indigo-500/40 transition hover:-translate-y-0.5"
+        >
+          {primaryLink.label} →
+        </a>
+      )}
+    </header>
+
+    {hero && (
+      <div class="overflow-hidden rounded-3xl border border-white/15 bg-white/5">
+        <Image
+          src={hero}
+          alt={project.data.heroImageAlt || project.data.title}
+          class="h-full w-full object-cover"
+        />
+      </div>
+    )}
+
+    <div class="prose-content space-y-8">
+      <Content />
+    </div>
+
+    {project.data.links.length > 1 && (
+      <div class="rounded-3xl border border-white/10 bg-white/5 p-8">
+        <h2 class="mb-4 text-lg font-semibold text-white">Explore more</h2>
+        <ul class="flex flex-wrap gap-3 text-sm text-neutral-200">
+          {project.data.links.slice(1).map((link) => (
+            <li>
+              <a
+                href={link.href}
+                target={link.href.startsWith('http') ? '_blank' : undefined}
+                rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+                class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 transition hover:border-white/40 hover:text-white"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </article>
+</SiteLayout>

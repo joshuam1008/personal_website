@@ -1,0 +1,70 @@
+---
+title: "Custom Domains on GitHub Pages: Lessons Learned"
+description: "A quick checklist I wish I had when wiring www.joshua-mason.com to GitHub Pages."
+pubDate: 2025-08-12
+heroImage: ../../assets/blog-placeholder-2.jpg
+heroImageAlt: "Screenshot of DNS records for a custom domain"
+featured: false
+tags: ["github-pages", "dns", "automation"]
+readingTime: "4 min read"
+---
+
+Mapping a custom domain to GitHub Pages looks simple on paper, but I still tripped over a few details. Here are the notes I kept for future me.
+
+## 1. Start with DNS
+
+- Add an `A` record that points `@` to GitHub's IPs (`185.199.108.153` through `185.199.111.153`).
+- Add a `CNAME` record for `www` that targets `<username>.github.io`.
+- Wait for propagation, and don't forget to purge any old records from a previous host.
+
+## 2. Update the repository
+
+- Create a `CNAME` file in the root of the Pages branch with the exact domain (`www.joshua-mason.com`).
+- Enable the "Enforce HTTPS" checkbox once the certificate appears—it can take a few minutes after DNS propagates.
+
+## 3. Automate deployments
+
+Even though GitHub Pages can build an Astro project directly, I prefer an explicit GitHub Action pipeline. It gives me a reliable place to run `npm run build`, upload the `dist/` artifact, and publish to the `gh-pages` branch.
+
+```yaml
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+## 4. Keep a fallback
+
+I keep a Notion page and the README link handy in case DNS goes sideways. GitHub Pages is reliable, but caching issues or expired certificates can still surprise visitors. A lightweight status page saves a lot of stress.
+
+If you're working through your own setup, feel free to use this as a checklist. It took me an evening to get right; with these notes it should take future me about fifteen minutes.

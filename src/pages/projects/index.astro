@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from '@components/ProjectCard.astro';
+import SiteLayout from '@layouts/SiteLayout.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => {
+  if (a.data.sortOrder && b.data.sortOrder) {
+    return a.data.sortOrder - b.data.sortOrder;
+  }
+  if (a.data.sortOrder) return -1;
+  if (b.data.sortOrder) return 1;
+  return b.data.launchedAt.getTime() - a.data.launchedAt.getTime();
+});
+---
+
+<SiteLayout title="Projects" description="Selected builds, experiments, and systems I’ve shipped.">
+  <section class="container mt-20 space-y-12" data-reveal>
+    <header class="max-w-3xl space-y-6">
+      <span class="badge">Projects</span>
+      <h1 class="headline">Experiments and platforms that shaped my craft</h1>
+      <p class="text-lg text-neutral-300">
+        Each project taught me something new about pairing machine learning with purposeful product design. These are
+        the highlights worth sharing.
+      </p>
+    </header>
+
+    <div class="grid gap-10">
+      {projects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+  </section>
+</SiteLayout>

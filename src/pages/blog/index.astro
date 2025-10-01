@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from '@components/PostCard.astro';
+import SiteLayout from '@layouts/SiteLayout.astro';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<SiteLayout title="Writing" description="Ideas on search, ML craft, and shipping polished experiences.">
+  <section class="container mt-20 space-y-12" data-reveal>
+    <header class="max-w-3xl space-y-6">
+      <span class="badge">Writing</span>
+      <h1 class="headline">Field notes on relevance, product, and polish</h1>
+      <p class="text-lg text-neutral-300">
+        Longer-form essays, changelog updates, and experiments in public. Expect a blend of ML deep dives, design
+        thinking, and the occasional tooling rant.
+      </p>
+    </header>
+
+    <div class="grid gap-8 md:grid-cols-2">
+      {posts.map((post) => (
+        <PostCard post={post} />
+      ))}
+    </div>
+  </section>
+</SiteLayout>
