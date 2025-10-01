@@ -1,0 +1,13 @@
+{
+  "section": "experience",
+  "title": "Data Science Intern",
+  "organization": "Laboratory for Analytic Sciences",
+  "location": "Raleigh, NC",
+  "start": "2022-05",
+  "end": "2022-06",
+  "bullets": [
+    "Scraped Mandarin-language news for NLP event extraction; annotated and ran inference.",
+    "Applied Mandarin skills for dataset quality and evaluation."
+  ]
+}
+

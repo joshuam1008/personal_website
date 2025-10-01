@@ -1,0 +1,13 @@
+{
+  "section": "experience",
+  "title": "Applied Scientist",
+  "organization": "Thomson Reuters",
+  "location": "Eagan, MN",
+  "start": "2025-04",
+  "bullets": [
+    "Build agentic AI systems for tax, audit, and accounting domains.",
+    "Design LLM orchestration, retrieval workflows, and robust evaluation/guardrails.",
+    "Ship practitioner-focused assistants grounded in NLP/RAG best practices."
+  ]
+}
+

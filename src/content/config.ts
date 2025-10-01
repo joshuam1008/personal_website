@@ -2,7 +2,12 @@ import { defineCollection, z } from 'astro:content';
 
 const linkSchema = z.object({
   label: z.string(),
-  href: z.string().url(),
+  // Accept absolute URLs (http/https) or internal site paths starting with '/'
+  href: z
+    .string()
+    .refine((s) => s.startsWith('/') || /^https?:\/\//.test(s), {
+      message: 'Invalid href; must be absolute URL or internal path',
+    }),
 });
 
 const blog = defineCollection({

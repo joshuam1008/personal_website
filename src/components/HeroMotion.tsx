@@ -1,9 +1,10 @@
 import { motion, type Variants } from 'framer-motion';
 
 const highlights = [
-  'Semantic search systems',
-  'Product-focused ML leadership',
-  'Design + dev collaboration',
+  'Agentic AI (LLM orchestration)',
+  'LLM + RAG foundations',
+  'NLP classification & dataset design',
+  'Cloud ML (SageMaker, Spark)',
 ];
 
 const cardVariants: Variants = {
@@ -67,7 +68,7 @@ export default function HeroMotion() {
       <div className="space-y-6">
         <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-200">
           <span className="h-2 w-2 rounded-full bg-emerald-400" />
-          Currently leading ML relevance at Searchly
+          Applied Scientist — Thomson Reuters
         </div>
 
         <div className="space-y-3">

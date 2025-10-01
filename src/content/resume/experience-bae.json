@@ -1,0 +1,13 @@
+{
+  "section": "experience",
+  "title": "Data Science (R&D) Intern",
+  "organization": "BAE Systems, Inc.",
+  "location": "Durham, NC",
+  "start": "2023-05",
+  "end": "2023-08",
+  "bullets": [
+    "Researched cloud segmentation for multi-band live streams; OpenCV, scikit-learn, PyTorch.",
+    "Built dataset and U-net variants; achieved >75% accuracy at 15 FPS across visual/IR."
+  ]
+}
+

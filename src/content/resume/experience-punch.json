@@ -1,0 +1,13 @@
+{
+  "section": "experience",
+  "title": "Cybersecurity Intern",
+  "organization": "Punch Cyber Analytics Group",
+  "location": "Reston, VA",
+  "start": "2021-05",
+  "end": "2021-08",
+  "bullets": [
+    "Engineered weak-labeling for 1TB+ Zeek network logs with Apache Spark.",
+    "Performed OSINT investigations with Maltego on APT threats."
+  ]
+}
+
