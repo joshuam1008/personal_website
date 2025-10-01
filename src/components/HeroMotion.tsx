@@ -1,4 +1,6 @@
 import { motion, type Variants } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { getAnimationConfig } from '@config/animations';
 
 const highlights = [
   'Agentic AI (LLM orchestration)',
@@ -6,6 +8,8 @@ const highlights = [
   'NLP classification & dataset design',
   'Cloud ML (SageMaker, Spark)',
 ];
+
+const quoteText = '"I care about how models meet people. The tooling is fun, but the experience is the product."';
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -43,7 +47,31 @@ const floatingVariants: Variants = {
   },
 };
 
+const letterVariants: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 1.5 + index * 0.02, duration: 0.3 },
+  }),
+};
+
 export default function HeroMotion() {
+  const [enableRipple, setEnableRipple] = useState(true);
+
+  useEffect(() => {
+    const config = getAnimationConfig();
+    setEnableRipple(config.enableQuoteRipple);
+
+    const handleConfigChange = (e: CustomEvent) => {
+      setEnableRipple(e.detail.enableQuoteRipple);
+    };
+
+    window.addEventListener('animation-config-changed', handleConfigChange as EventListener);
+    return () => {
+      window.removeEventListener('animation-config-changed', handleConfigChange as EventListener);
+    };
+  }, []);
   return (
     <motion.div
       variants={cardVariants}
@@ -93,7 +121,22 @@ export default function HeroMotion() {
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-neutral-300">
-          "I care about how models meet people. The tooling is fun, but the experience is the product."
+          {enableRipple ? (
+            quoteText.split('').map((char, index) => (
+              <motion.span
+                key={`${char}-${index}`}
+                custom={index}
+                variants={letterVariants}
+                initial="hidden"
+                animate="visible"
+                style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+              >
+                {char}
+              </motion.span>
+            ))
+          ) : (
+            quoteText
+          )}
         </div>
       </div>
     </motion.div>

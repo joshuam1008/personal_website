@@ -2,6 +2,8 @@
 import { Github, Linkedin, Mail } from 'lucide-astro';
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import MobileMenu from './MobileMenu';
+import ThemeSelector from './ThemeSelector';
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -45,6 +47,7 @@ const socialLinks = [
     </nav>
 
     <div class="flex items-center gap-1.5">
+      <ThemeSelector client:load />
       {socialLinks.map(({ href, label, icon: Icon }) => (
         <a
           href={href}
@@ -56,6 +59,7 @@ const socialLinks = [
           <Icon class="h-4 w-4" />
         </a>
       ))}
+      <MobileMenu client:load />
     </div>
   </div>
 </header>

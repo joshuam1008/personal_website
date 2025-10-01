@@ -49,15 +49,45 @@ Configured in [astro.config.mjs](astro.config.mjs):
 - `@content` → `./src/content`
 - `@styles` → `./src/styles`
 - `@lib` → `./src/lib`
+- `@config` → `./src/config`
+
+### Theme System
+The site supports multiple themes via [src/config/themes.ts](src/config/themes.ts):
+- **Dark Glassmorphism** (default) - Current design with indigo/pink gradients
+- **Matrix Terminal** - Black/green CRT aesthetic with scanlines and Matrix rain effect
+- **Neon Cyberpunk** - Hot pink/cyan with neon glows
+- **Minimal Light** - Clean white theme for daytime use
+- **Dracula** - Purple/pink pastels
+- **Nord** - Cool blues and whites
+
+Theme selection dropdown in header ([ThemeSelector.tsx](src/components/ThemeSelector.tsx)). Settings stored in `localStorage`. All themes use CSS custom properties for dynamic color switching.
+
+### Animation System
+Configurable animation system via [src/config/animations.ts](src/config/animations.ts):
+- **Typewriter effect** - Hero headline typing animation
+- **Quote ripple** - Letter-by-letter reveal in HeroMotion component
+- **Card tilt** - 3D tilt on hover for ProjectCard components
+- **Shimmer effects** - Animated shimmer sweep across glass cards
+- **Parallax scrolling** - Elements with `data-parallax` attribute
+- **Cursor trail** - Particle trail following cursor (disabled by default for performance)
+- **Matrix rain** - Terminal theme background effect
+- **Scroll reveals** - Fade-up animations with `data-reveal` attribute
+
+Settings panel (gear icon, bottom-right) allows toggling individual animations. All settings stored in `localStorage`.
 
 ### Client-Side Search
 The search system spans multiple files:
 1. [src/pages/search-index.json.ts](src/pages/search-index.json.ts) builds a JSON endpoint with all blog posts and projects
 2. [src/components/SearchPanel.tsx](src/components/SearchPanel.tsx) fetches the index and uses MiniSearch for fuzzy search with title/tag boosting
-3. Search queries look across title, summary, content, and tags with fuzzy matching (0.2) and prefix matching enabled
+3. Search configuration centralized in [src/lib/search-config.ts](src/lib/search-config.ts)
 
 ### Scroll Animations
-[src/lib/reveal.ts](src/lib/reveal.ts) provides `initReveal()` which animates elements with `data-reveal` attributes on scroll into view. Elements can specify `data-reveal-delay` for staggered animations. Uses Motion One's `inView` API.
+Multiple animation systems:
+- [src/lib/reveal.ts](src/lib/reveal.ts) - Base scroll reveal with Motion One's `inView` API
+- [src/lib/parallax.ts](src/lib/parallax.ts) - Parallax scroll effects for `data-parallax` elements
+- [src/lib/shimmer.ts](src/lib/shimmer.ts) - Shimmer animations for glass cards
+- [src/lib/cursor-trail.ts](src/lib/cursor-trail.ts) - Cursor particle trail effect
+- [src/lib/matrix-rain.ts](src/lib/matrix-rain.ts) - Matrix rain effect for terminal theme
 
 ### Optional Integrations
 Set these environment variables to enable features:

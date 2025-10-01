@@ -1,12 +1,16 @@
 ---
 import HeroMotion from './HeroMotion';
+import TypewriterText from './TypewriterText';
 ---
 
 <section class="container relative flex flex-col gap-12 pt-24 pb-20 lg:flex-row lg:items-center">
   <div class="flex-1 space-y-8">
     <span class="badge">Applied Scientist @ Thomson Reuters</span>
     <h1 class="headline">
-      Building agentic AI systems for tax, audit, and accounting.
+      <TypewriterText
+        text="Building agentic AI systems for tax, audit, and accounting."
+        client:load
+      />
     </h1>
     <p class="text-lg text-neutral-300 md:text-xl">
       I design and ship LLM-powered assistants and retrieval workflows that solve real practitioner problems. My work
@@ -29,7 +33,7 @@ import HeroMotion from './HeroMotion';
     </div>
   </div>
 
-  <div class="flex-1">
+  <div class="flex-1" data-parallax="0.15">
     <HeroMotion client:load />
   </div>
 </section>
