@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import ResumeTimeline from '@components/ResumeTimeline.astro';
 import SiteLayout from '@layouts/SiteLayout.astro';
+import headshotLarge from '../assets/headshot-large.jpg';
 
 const resumeItems = await getCollection('resume');
 const experience = resumeItems.filter((item) => item.data.section === 'experience');
@@ -9,23 +11,42 @@ const education = resumeItems.filter((item) => item.data.section === 'education'
 ---
 
 <SiteLayout title="About" description="Applied Scientist at Thomson Reuters building agentic AI for tax, audit, and accounting; MCS @ NC State.">
-  <section class="container mt-20 space-y-12" data-reveal>
-    <header class="max-w-3xl space-y-6">
-      <span class="badge">About</span>
-      <h1 class="headline">Hi, I’m Joshua Mason.</h1>
-      <p class="text-lg text-neutral-300">
-        I’m a full‑time Applied Scientist at Thomson Reuters, where I build agentic AI systems for tax, audit, and
-        accounting. I focus on LLM assistant design, retrieval workflows, and robust evaluation so that experts can
-        trust and adopt these tools.
-      </p>
-      <p class="text-lg text-neutral-300">
-        I completed my MCS at NC State in Dec 2024 (Park Scholar), after prior internships in computer vision (BAE Systems)
-        and NLP data/annotation (LAS). I enjoy practical ML: Python, PyTorch, scikit‑learn, AWS SageMaker, and Spark; with an
-        emphasis on clear objectives and measurable outcomes. I also led the cybersecurity club, studied Mandarin (Advanced‑Mid OPI),
-        and tinker with RL and search projects.
-      </p>
-    </header>
+  <section class="container mt-20 space-y-12">
+    <!-- Two-column layout: text + headshot -->
+    <div class="grid gap-8 lg:grid-cols-[1fr_auto]" data-reveal>
+      <!-- Left column: Text content -->
+      <header class="max-w-3xl space-y-6">
+        <span class="badge">About</span>
+        <h1 class="headline">Hi, I'm Joshua Mason.</h1>
+        <p class="text-lg text-neutral-300">
+          I'm a full‑time Applied Scientist at Thomson Reuters, where I build agentic AI systems for tax, audit, and
+          accounting. I focus on LLM assistant design, retrieval workflows, and robust evaluation so that experts can
+          trust and adopt these tools.
+        </p>
+        <p class="text-lg text-neutral-300">
+          I completed my MCS at NC State in Dec 2024 (Park Scholar), after prior internships in computer vision (BAE Systems)
+          and NLP data/annotation (LAS). I enjoy practical ML: Python, PyTorch, scikit‑learn, AWS SageMaker, and Spark; with an
+          emphasis on clear objectives and measurable outcomes. I also led the cybersecurity club, studied Mandarin (Advanced‑Mid OPI),
+          and tinker with RL and search projects.
+        </p>
+      </header>
 
+      <!-- Right column: Large headshot with animations -->
+      <div class="hidden lg:block" data-parallax="0.1">
+        <div class="glass-card overflow-hidden" data-reveal>
+          <Image
+            src={headshotLarge}
+            alt="Joshua Mason headshot"
+            class="h-auto w-full object-cover"
+            width={400}
+            height={533}
+            loading="eager"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience/Education timeline section -->
     <div class="grid gap-12 lg:grid-cols-[60%_auto]">
       <ResumeTimeline items={experience} title="Experience" />
       {education.length > 0 && <ResumeTimeline items={education} title="Education" />}

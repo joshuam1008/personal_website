@@ -89,7 +89,7 @@ export default function AnimationSettings() {
                     id={String(key)}
                     onClick={() => handleToggle(key)}
                     className={`relative h-6 w-11 rounded-full transition ${
-                      config[key] ? 'bg-accent' : 'bg-white/20'
+                      config[key] ? 'bg-indigo-500' : 'bg-white/20'
                     }`}
                     aria-label={`Toggle ${animationDescriptions[key]}`}
                   >

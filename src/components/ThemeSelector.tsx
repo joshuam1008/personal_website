@@ -1,17 +1,34 @@
 import { Palette } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { applyTheme, getTheme, themes } from '@config/themes';
 
 export default function ThemeSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState('default');
+  const [mounted, setMounted] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
 
   useEffect(() => {
     // Load saved theme
     const saved = localStorage.getItem('theme') || 'default';
     setCurrentTheme(saved);
     applyTheme(getTheme(saved));
+    // Mark component as mounted for portal rendering
+    setMounted(true);
   }, []);
+
+  const handleToggle = () => {
+    if (!isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + 8, // 8px gap below button
+        right: window.innerWidth - rect.right,
+      });
+    }
+    setIsOpen(!isOpen);
+  };
 
   const handleThemeChange = (themeId: string) => {
     setCurrentTheme(themeId);
@@ -23,24 +40,28 @@ export default function ThemeSelector() {
     <div className="relative">
       {/* Theme Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        ref={buttonRef}
+        onClick={handleToggle}
         className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-neutral-200 transition hover:border-white/30 hover:text-white"
         aria-label="Select theme"
       >
         <Palette className="h-4 w-4" />
       </button>
 
-      {/* Dropdown */}
-      {isOpen && (
+      {/* Dropdown - Rendered via Portal to escape DOM hierarchy */}
+      {isOpen && mounted && createPortal(
         <>
           {/* Overlay */}
           <div
-            className="fixed inset-0 z-40"
+            className="fixed inset-0 z-[100] bg-black/20"
             onClick={() => setIsOpen(false)}
           />
 
           {/* Menu */}
-          <div className="absolute right-0 top-12 z-50 w-56 rounded-2xl border border-white/10 bg-surface/95 p-2 shadow-2xl backdrop-blur-xl">
+          <div
+            className="fixed z-[101] w-56 rounded-2xl border border-white/10 bg-surface p-2 shadow-2xl backdrop-blur-xl"
+            style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
+          >
             <div className="mb-2 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-neutral-400">
               Theme
             </div>
@@ -62,7 +83,8 @@ export default function ThemeSelector() {
               </button>
             ))}
           </div>
-        </>
+        </>,
+        document.body
       )}
     </div>
   );
