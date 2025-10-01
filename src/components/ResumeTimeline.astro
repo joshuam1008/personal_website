@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import ExternalLink from './ExternalLink.astro';
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
@@ -40,9 +41,9 @@ const sorted = [...items].sort((a, b) => b.data.start.localeCompare(a.data.start
           </span>
           {item.data.location && <span>{item.data.location}</span>}
           {item.data.link && (
-            <a class="text-accent underline-offset-4 hover:underline" href={item.data.link} target="_blank" rel="noreferrer">
+            <ExternalLink href={item.data.link} class="text-accent underline-offset-4 hover:underline">
               Details
-            </a>
+            </ExternalLink>
           )}
         </div>
         {item.data.bullets.length > 0 && (

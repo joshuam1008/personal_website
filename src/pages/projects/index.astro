@@ -2,15 +2,9 @@
 import { getCollection } from 'astro:content';
 import ProjectCard from '@components/ProjectCard.astro';
 import SiteLayout from '@layouts/SiteLayout.astro';
+import { sortProjects } from '@lib/sort-projects';
 
-const projects = (await getCollection('projects')).sort((a, b) => {
-  if (a.data.sortOrder && b.data.sortOrder) {
-    return a.data.sortOrder - b.data.sortOrder;
-  }
-  if (a.data.sortOrder) return -1;
-  if (b.data.sortOrder) return 1;
-  return b.data.launchedAt.getTime() - a.data.launchedAt.getTime();
-});
+const projects = sortProjects(await getCollection('projects'));
 ---
 
 <SiteLayout title="Projects" description="Selected builds, experiments, and systems I’ve shipped.">

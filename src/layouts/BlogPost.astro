@@ -30,7 +30,7 @@ const { title, description, pubDate, updatedDate, heroImage, heroImageAlt = '' }
     {heroImage && (
       <div class="relative mt-12 overflow-hidden rounded-3xl border border-white/15 bg-white/5">
         <Image
-          src={heroImage!}
+          src={heroImage}
           alt={heroImageAlt || title}
           class="h-full w-full object-cover"
           loading="lazy"

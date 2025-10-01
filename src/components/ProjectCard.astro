@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import ExternalLink from './ExternalLink.astro';
 import FormattedDate from './FormattedDate.astro';
 
 interface Props {
@@ -10,10 +11,6 @@ interface Props {
 const { project } = Astro.props as Props;
 const { data } = project;
 const hero = data.heroImage;
-const launchDateLabel = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  year: 'numeric',
-}).format(data.launchedAt);
 ---
 
 <article class:list={['glass-card flex flex-col overflow-hidden', { 'md:flex-row': data.featured }] }>
@@ -26,7 +23,7 @@ const launchDateLabel = new Intl.DateTimeFormat('en-US', {
         loading="lazy"
       />
       <span class="absolute left-4 top-4 rounded-full bg-black/40 px-3 py-1 text-xs tracking-wide text-white">
-        {launchDateLabel}
+        <FormattedDate date={data.launchedAt} />
       </span>
     </div>
   )}
@@ -49,14 +46,12 @@ const launchDateLabel = new Intl.DateTimeFormat('en-US', {
       <ul class="flex flex-wrap gap-3">
         {data.links.map((link) => (
           <li>
-            <a
+            <ExternalLink
               href={link.href}
               class="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-neutral-100 transition hover:border-white/40 hover:text-white"
-              target={link.href.startsWith('http') ? '_blank' : undefined}
-              rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
             >
               {link.label}
-            </a>
+            </ExternalLink>
           </li>
         ))}
       </ul>
