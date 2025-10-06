@@ -25,16 +25,16 @@ export interface Theme {
 export const themes: Record<string, Theme> = {
   default: {
     id: 'default',
-    name: 'Dark Glassmorphism',
+    name: 'Matrix Dark',
     colors: {
-      background: '#0b1120',
-      surface: '#111827',
-      card: '#1e293b',
+      background: '#000000',
+      surface: '#001a00',
+      card: '#002200',
       text: '#f1f5f9',
-      textMuted: '#cbd5e1',
-      accent: '#6366f1',
-      accentForeground: '#f9fafc',
-      border: '#ffffff',
+      textMuted: '#00cc33',
+      accent: '#00ff41',
+      accentForeground: '#000000',
+      border: '#00ff41',
     },
     fonts: {
       sans: '"Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif',

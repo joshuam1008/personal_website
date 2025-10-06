@@ -83,7 +83,7 @@ export default function HeroMotion() {
         variants={glowVariants}
         initial="initial"
         animate="animate"
-        className="pointer-events-none absolute -top-32 right-0 h-64 w-64 rounded-full bg-gradient-to-br from-indigo-500/40 via-indigo-500/30 to-transparent blur-3xl"
+        className="pointer-events-none absolute -top-32 right-0 h-64 w-64 rounded-full bg-gradient-to-br from-green-500/30 via-green-500/20 to-transparent blur-3xl"
       />
 
       <motion.div
@@ -111,7 +111,7 @@ export default function HeroMotion() {
                 animate="visible"
                 className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 mix-blend-screen"
               >
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-500/30 text-xs font-semibold text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-green-500/30 text-xs font-semibold text-white">
                   {index + 1}
                 </span>
                 <span>{item}</span>

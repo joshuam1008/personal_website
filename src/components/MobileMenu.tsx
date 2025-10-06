@@ -81,7 +81,7 @@ export default function MobileMenu() {
                     href={item.href}
                     className={`rounded-xl px-4 py-3 text-base font-medium transition ${
                       isActive(item.href)
-                        ? 'bg-white/20 text-white shadow-lg shadow-indigo-500/30'
+                        ? 'bg-white/20 text-white shadow-lg shadow-accent/30'
                         : 'text-neutral-200 hover:bg-white/10 hover:text-white'
                     }`}
                     onClick={() => setIsOpen(false)}

@@ -55,12 +55,10 @@ Configured in [astro.config.mjs](astro.config.mjs):
 The site supports multiple themes via [src/config/themes.ts](src/config/themes.ts):
 - **Dark Glassmorphism** (default) - Current design with indigo/pink gradients
 - **Matrix Terminal** - Black/green CRT aesthetic with scanlines and Matrix rain effect
-- **Neon Cyberpunk** - Hot pink/cyan with neon glows
-- **Minimal Light** - Clean white theme for daytime use
-- **Dracula** - Purple/pink pastels
-- **Nord** - Cool blues and whites
 
-Theme selection dropdown in header ([ThemeSelector.tsx](src/components/ThemeSelector.tsx)). Settings stored in `localStorage`. All themes use CSS custom properties for dynamic color switching.
+Note: Only two themes are currently fully implemented. The theme system applies CSS custom properties dynamically only for the terminal theme; the default theme uses compiled Tailwind colors.
+
+Theme selection dropdown in header ([ThemeSelector.tsx](src/components/ThemeSelector.tsx)). Settings stored in `localStorage`. The `data-theme` attribute on `documentElement` enables theme-specific CSS.
 
 ### Animation System
 Configurable animation system via [src/config/animations.ts](src/config/animations.ts):
@@ -99,4 +97,4 @@ Set these environment variables to enable features:
 - Deploys to GitHub Pages via `.github/workflows/deploy.yml`
 - Pushes to `main` trigger automatic builds and deploys
 - `public/CNAME` maintains custom domain `www.joshua-mason.com`
-- Built on Node 20, uses `actions/deploy-pages@v4`
+- Built on Node 22, uses `actions/deploy-pages@v4`

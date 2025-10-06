@@ -7,15 +7,15 @@
 @layer base {
   :root {
     color-scheme: dark;
-    /* CSS variables for Terminal theme only (hex format) */
-    --color-background: #0b1120;
-    --color-surface: #111827;
-    --color-card: #1e293b;
-    --color-text: #f1f5f9;
-    --color-text-muted: #cbd5e1;
-    --color-accent: #6366f1;
-    --color-accent-foreground: #f9fafc;
-    --color-border: #ffffff;
+    /* CSS variables (hex format) */
+    --color-background: #000000;
+    --color-surface: #001a00;
+    --color-card: #002200;
+    --color-text: #00ff41;
+    --color-text-muted: #00cc33;
+    --color-accent: #00ff41;
+    --color-accent-foreground: #000000;
+    --color-border: #00ff41;
 
     /* Font families */
     --font-sans: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
@@ -27,12 +27,11 @@
   }
 
   body {
-    background-color: #0b1120;
+    background-color: #000000;
     color: #f1f5f9;
     @apply antialiased;
-    background-image: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15), transparent 55%),
-      radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.2), transparent 55%),
-      radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.12), transparent 50%);
+    background-image: radial-gradient(circle at 20% 20%, rgba(0, 255, 65, 0.08), transparent 50%),
+      radial-gradient(circle at 80% 60%, rgba(0, 204, 51, 0.06), transparent 50%);
     background-attachment: fixed;
   }
 
@@ -68,8 +67,8 @@
   }
 
   ::selection {
-    background-color: #6366f1;
-    color: #f9fafc;
+    background-color: #00ff41;
+    color: #000000;
   }
 
   [data-theme='terminal'] ::selection {
