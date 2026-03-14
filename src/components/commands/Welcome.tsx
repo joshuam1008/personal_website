@@ -34,9 +34,9 @@ const Welcome: React.FC<WelcomeProps> = () => {
       <pre className="term-ascii-mobile term-ascii">{BANNER_MOBILE}</pre>
       <div className="term-sep">{'─'.repeat(60)}</div>
       <p>
-        <span className="term-accent">ML Engineer</span>
+        <span className="term-accent">Applied Scientist & AI Engineer</span>
         <span className="term-dim"> · </span>
-        <span className="term-accent2">Search & Relevance</span>
+        <span className="term-accent2">Agents & Search</span>
         <span className="term-dim"> · </span>
         <span>Thomson Reuters</span>
       </p>
