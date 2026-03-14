@@ -7,7 +7,8 @@ import React, {
 import Output from './Output';
 import TermPrompt from './TermPrompt';
 import { COMMAND_NAMES, COMMANDS } from '../data/commands';
-import { applyTheme, type ThemeName } from './commands/Themes';
+import { applyTheme, THEMES, type ThemeName } from './commands/Themes';
+import { SOCIALS } from '../data/socials';
 import { termContext, type TermContextValue } from './termContext';
 import type { ResumeEntry } from './commands/Resume';
 import type { ProjectEntry } from './commands/Projects';
@@ -130,44 +131,102 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
     // Tab — autocomplete
     if (isTab) {
       e.preventDefault();
-      if (!inputVal) return;
+      
+      const rawTokens = inputVal.split(/\s+/);
+      const tokens = rawTokens.filter((t) => t.length > 0);
 
-      const tokens = inputVal.split(/\s+/);
-      // Only autocomplete the command name (first token), not args
-      if (tokens.length === 1) {
-        // If there's a trailing space, they might be starting tab completion for the next term, but we'll ignore for now unless length > 1
-        if (inputVal.endsWith(' ')) {
-          // find exactly matching command
-          const exactCmd = COMMANDS.find((c) => c.cmd === tokens[0]);
-          if (exactCmd?.subCommands) {
-            setHints(exactCmd.subCommands);
-          }
-          return;
-        }
+      // If nothing typed, show all top-level commands
+      if (tokens.length === 0 || (!inputVal && tokens.length === 1)) {
+        setHints(COMMAND_NAMES);
+        return;
+      }
 
-        const prefix = tokens[0].toLowerCase();
-        const matches = COMMAND_NAMES.filter((c) => c.startsWith(prefix));
-        if (matches.length === 1) {
-          setInputVal(matches[0] + ' '); // add space to encourage subcommand typing
-          setHints([]);
-        } else if (matches.length > 1) {
-          setHints(matches);
-        }
-      } else if (tokens.length === 2 && !inputVal.endsWith(' ')) {
-        const baseCmd = tokens[0].toLowerCase();
-        const prefix = tokens[1].toLowerCase();
-        
-        const commandInfo = COMMANDS.find((c) => c.cmd === baseCmd);
-        if (commandInfo?.subCommands) {
-          const matches = commandInfo.subCommands.filter((sub) => sub.startsWith(prefix));
+      // Case A: User is midway through typing a token (no trailing space)
+      if (!inputVal.endsWith(' ')) {
+        if (tokens.length === 1) {
+          // Attempt to autocomplete the base command
+          const prefix = tokens[0].toLowerCase();
+          const matches = COMMAND_NAMES.filter((c) => c.startsWith(prefix));
           if (matches.length === 1) {
-            setInputVal(`${baseCmd} ${matches[0]} `);
+            // Auto-complete to the full word and add a tracking space.
+            // Do NOT show subcommand hints yet (Bash behavior)
+            setInputVal(matches[0] + ' ');
             setHints([]);
           } else if (matches.length > 1) {
             setHints(matches);
           }
+        } else if (tokens.length === 2) {
+          // Attempt to autocomplete a subcommand
+          const baseCmd = tokens[0].toLowerCase();
+          const prefix = tokens[1].toLowerCase();
+          
+          const commandInfo = COMMANDS.find((c) => c.cmd === baseCmd);
+          if (commandInfo?.subCommands) {
+            const matches = commandInfo.subCommands.filter((sub) => sub.startsWith(prefix));
+            if (matches.length === 1) {
+              setInputVal(`${baseCmd} ${matches[0]} `);
+              setHints([]);
+            } else if (matches.length > 1) {
+              setHints(matches);
+            }
+          }
+        } else if (tokens.length === 3) {
+          // Attempt to autocomplete a 3rd-tier arg
+          const baseCmd = tokens[0].toLowerCase();
+          const subCmd = tokens[1].toLowerCase();
+          const prefix = tokens[2].toLowerCase();
+
+          let options: string[] = [];
+          if (baseCmd === 'themes' && subCmd === 'set') {
+            options = THEMES.map((t) => t.name);
+          } else if (baseCmd === 'projects' && subCmd === 'go') {
+            options = projects.map((_, i) => (i + 1).toString());
+          } else if (baseCmd === 'socials' && subCmd === 'go') {
+            options = SOCIALS.map((_, i) => (i + 1).toString());
+          } else if (baseCmd === 'blog' && subCmd === 'read') {
+            options = blog.map((b) => b.slug);
+          }
+
+          if (options.length > 0) {
+            const matches = options.filter((opt) => opt.startsWith(prefix));
+            if (matches.length === 1) {
+              setInputVal(`${baseCmd} ${subCmd} ${matches[0]} `);
+              setHints([]);
+            } else if (matches.length > 1) {
+              setHints(matches);
+            }
+          }
+        }
+      } 
+      // Case B: User has completed a token and hit Tab on the trailing space
+      else {
+        if (tokens.length === 1) {
+          // e.g., inputVal === "resume "
+          const exactCmd = COMMANDS.find((c) => c.cmd === tokens[0]);
+          if (exactCmd?.subCommands) {
+            setHints(exactCmd.subCommands);
+          } else {
+            setHints([]);
+          }
+        } else if (tokens.length === 2) {
+          // e.g., inputVal === "themes set "
+          const baseCmd = tokens[0].toLowerCase();
+          const subCmd = tokens[1].toLowerCase();
+
+          let options: string[] = [];
+          if (baseCmd === 'themes' && subCmd === 'set') {
+            options = THEMES.map((t) => t.name);
+          } else if (baseCmd === 'projects' && subCmd === 'go') {
+            options = projects.map((_, i) => (i + 1).toString());
+          } else if (baseCmd === 'socials' && subCmd === 'go') {
+            options = SOCIALS.map((_, i) => (i + 1).toString());
+          } else if (baseCmd === 'blog' && subCmd === 'read') {
+            options = blog.map((b) => b.slug);
+          }
+          setHints(options);
         }
       }
+      
       return;
     }
 
