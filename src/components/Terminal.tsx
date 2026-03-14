@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import Output from './Output';
 import TermPrompt from './TermPrompt';
-import { COMMAND_NAMES } from '../data/commands';
+import { COMMAND_NAMES, COMMANDS } from '../data/commands';
 import { applyTheme, type ThemeName } from './commands/Themes';
 import { termContext, type TermContextValue } from './termContext';
 import type { ResumeEntry } from './commands/Resume';
@@ -135,13 +135,37 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
       const tokens = inputVal.split(/\s+/);
       // Only autocomplete the command name (first token), not args
       if (tokens.length === 1) {
+        // If there's a trailing space, they might be starting tab completion for the next term, but we'll ignore for now unless length > 1
+        if (inputVal.endsWith(' ')) {
+          // find exactly matching command
+          const exactCmd = COMMANDS.find((c) => c.cmd === tokens[0]);
+          if (exactCmd?.subCommands) {
+            setHints(exactCmd.subCommands);
+          }
+          return;
+        }
+
         const prefix = tokens[0].toLowerCase();
         const matches = COMMAND_NAMES.filter((c) => c.startsWith(prefix));
         if (matches.length === 1) {
-          setInputVal(matches[0]);
+          setInputVal(matches[0] + ' '); // add space to encourage subcommand typing
           setHints([]);
         } else if (matches.length > 1) {
           setHints(matches);
+        }
+      } else if (tokens.length === 2 && !inputVal.endsWith(' ')) {
+        const baseCmd = tokens[0].toLowerCase();
+        const prefix = tokens[1].toLowerCase();
+        
+        const commandInfo = COMMANDS.find((c) => c.cmd === baseCmd);
+        if (commandInfo?.subCommands) {
+          const matches = commandInfo.subCommands.filter((sub) => sub.startsWith(prefix));
+          if (matches.length === 1) {
+            setInputVal(`${baseCmd} ${matches[0]} `);
+            setHints([]);
+          } else if (matches.length > 1) {
+            setHints(matches);
+          }
         }
       }
       return;
