@@ -111,8 +111,10 @@ body::after {
   height: 100vh;
   width: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 1.25rem 1.5rem 6rem;
   scroll-behavior: smooth;
+  word-wrap: break-word; /* prevent long uninterruptable strings from breaking layout */
 }
 
 /* Scrollbar */
@@ -200,6 +202,13 @@ body::after {
 
 .term-ascii-mobile {
   display: none;
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--glow);
+  white-space: pre !important;
+  word-wrap: normal !important;
+  line-height: 1;
+  font-size: 10px;
+  overflow: hidden;
 }
 
 /* ── Section headers in command output ────────────────────── */
@@ -266,6 +275,7 @@ body::after {
   color: var(--text-dim);
   margin: 0.4rem 0;
   user-select: none;
+  border-bottom: 1px solid var(--text-dim);
 }
 
 /* ── Themes list ──────────────────────────────────────────── */
@@ -284,6 +294,10 @@ body::after {
 
   #terminal-root {
     padding: 0.75rem 0.9rem 8rem;
+  }
+  
+  .term-input {
+    font-size: 16px; /* Avoid iOS auto-zoom */
   }
 
   .term-ascii         { display: none; }

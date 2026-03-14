@@ -17,22 +17,29 @@ const BANNER_DESKTOP = `
                                     ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═══╝`;
 
 const BANNER_MOBILE = `
- _ ___  ___ _  _ _   _  _   
-| / _ \/ __| || | | | |/_\\  
-| \\_, /\\__ \\ __ | |_| / _ \\ 
-|_|/_/ |___/_||_|\\___/_/ \\_\\
-                             
- __  __   _   ___  ___  _  _ 
-|  \\/  | /_\\ / __|/ _ \\| \\| |
-| |\\/| |/ _ \\\\__ \\ (_) | .\` |
-|_|  |_/_/ \\_\\___/\\___/|_|\\_|`;
+       _           _                 
+      | |         | |                
+      | | ___  ___| |__  _   _  __ _ 
+  _   | |/ _ \\/ __| '_ \\| | | |/ _\` |
+ | |__| | (_) \\__ \\ | | | |_| | (_| |
+  \\____/ \\___/|___/_| |_|\\__,_|\\__,_|
+                                     
+                                     
+                  __  __                       
+                |  \\/  |                      
+                | \\  / | __ _ ___  ___  _ __  
+                | |\\/| |/ _\` / __|/ _ \\| '_ \\ 
+                | |  | | (_| \\__ \\ (_) | | | |
+                |_|  |_|\\__,_|___/\\___/|_| |_|
+                               
+                               `;
 
 const Welcome: React.FC<WelcomeProps> = () => {
   return (
     <div data-testid="welcome">
       <pre className="term-ascii">{BANNER_DESKTOP}</pre>
-      <pre className="term-ascii-mobile term-ascii">{BANNER_MOBILE}</pre>
-      <div className="term-sep">{'─'.repeat(60)}</div>
+      <pre className="term-ascii-mobile">{BANNER_MOBILE}</pre>
+      <div className="term-sep" />
       <p>
         <span className="term-accent">Applied Scientist & AI Engineer</span>
         <span className="term-dim"> · </span>
@@ -45,7 +52,7 @@ const Welcome: React.FC<WelcomeProps> = () => {
         Use <span className="term-accent3">Tab</span> to autocomplete,{' '}
         <span className="term-accent3">↑↓</span> for history.
       </p>
-      <div className="term-sep" style={{ marginTop: '0.5rem' }}>{'─'.repeat(60)}</div>
+      <div className="term-sep" style={{ marginTop: '0.5rem' }} />
     </div>
   );
 };
