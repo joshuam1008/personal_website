@@ -1,33 +1,30 @@
 ---
-title: "Personal Website Refresh"
-summary: "A performant Astro build that blends static content with animated islands to showcase my work."
+title: "Terminal Portfolio"
+summary: "An interactive terminal emulator portfolio blending Nostalgic CRT aesthetics with modern React."
 heroImage: ../../assets/blog-placeholder-4.jpg
-heroImageAlt: "Hero concept for the personal website redesign"
-launchedAt: 2025-10-01
+heroImageAlt: "Terminal emulator interface"
+launchedAt: 2026-03-14
 featured: true
-tags: ["astro", "tailwind", "design-system"]
+tags: ["astro", "react", "css-only"]
 links:
-  - label: "Live site"
-    href: "https://www.joshua-mason.com"
   - label: "Source"
     href: "https://github.com/joshuam1008/personal_website"
 sortOrder: 1
 ---
 
-The 2025 refresh focuses on motion-forward storytelling without sacrificing load time. Astro's island architecture keeps most pages static, while targeted React components add polish where it matters.
+This portfolio completely reimagines a standard website as a fully interactive Unix-style terminal emulator. Built using an Astro static shell that hydrates a pure React terminal engine, the site delivers a unique, nostalgic experience without sacrificing modern maintainability or SEO.
 
-## Highlights
+## Features
 
-- Tailwind-powered design system with glassmorphism accents, layered gradients, and dark-first theming.
-- Hero section animated with `framer-motion`, including staggered badges and a glowing backdrop that reacts to cursor position.
-- Client-side MiniSearch index so visitors can filter posts and projects instantly.
-- GitHub Actions pipeline that builds on pushes to `main` and publishes straight to GitHub Pages with my custom domain.
+- **Custom Terminal Engine**: The core `Terminal.tsx` component handles keyboard event loops, ArrowUp/ArrowDown command history, Tab-completion, and dynamic output routing.
+- **16 Internal Commands**: Visitors can run commands like `resume`, `projects`, `skills`, and `socials` to view cleanly formatted output.
+- **Pure CSS Styling**: Ditching external UI libraries, the site relies entirely on vanilla CSS and custom properties to achieve a CRT scanline effect, text glow plugins, and dynamic color switching. 
+- **4 Live Themes**: Users can run `themes set amber` or `dracula` to instantly swap the root color variables, persisting their choices via `localStorage`.
 
-## Stack
+## Architecture
 
-- Astro 5 + MDX collections for blog posts, projects, and resume timeline data.
-- Tailwind CSS + typography plugin for consistent writing and component styling.
-- Motion One utilities for scroll reveals, with a React island dedicated to the hero animation.
-- Formspree for a zero-backend contact form and Giscus for optional comments on long-form posts.
+To ensure the content remains easy to update, the terminal commands read directly from Astro's data layer:
+- **MDX Collections**: `blog` and `projects` are written in MDX. Astro statically parses these at build time and passes the frontmatter into the React terminal component as props.
+- **JSON Timelines**: The `resume` command dynamically parses standalone JSON files representing each career stop, filtering them smoothly when users run subcommands like `resume experience`.
 
-The result is a résumé website that feels purposeful, handles future content growth, and stays easy to maintain.
+The result is a highly engaging, interactive landing page that still builds to a lightning-fast static directory hosted for free on GitHub Pages.

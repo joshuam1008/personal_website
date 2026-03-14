@@ -3,4 +3,4 @@
 
 export const SITE_TITLE = 'Joshua Mason — Terminal Portfolio';
 export const SITE_DESCRIPTION =
-  'ML engineer specializing in search & relevance systems. Interactive terminal portfolio.';
+  'Applied Scientist & AI Engineer specializing in agentic systems and search. Interactive terminal portfolio.';

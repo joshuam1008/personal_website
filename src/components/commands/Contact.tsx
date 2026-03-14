@@ -32,7 +32,7 @@ const Contact: React.FC = () => {
         </div>
       </div>
       <p className="term-dim" style={{ marginTop: '0.75rem', fontSize: '0.85em' }}>
-        I typically respond within a day or two. Happy to connect about ML, search systems, or internship/new-grad opportunities.
+        I typically respond within a day or two. Happy to connect about AI agents, agentic search, or evaluations/guardrails.
       </p>
     </div>
   );

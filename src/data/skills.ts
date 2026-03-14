@@ -6,11 +6,11 @@ export type SkillCategory = {
 export const SKILLS: SkillCategory[] = [
   {
     category: 'Languages',
-    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'C++', 'SQL', 'Mandarin Chinese'],
+    items: ['Python', 'TypeScript', 'C++', 'C', 'Java', 'SQL', 'Mandarin Chinese'],
   },
   {
     category: 'ML / AI',
-    items: ['PyTorch', 'scikit-learn', 'LangChain', 'AWS Bedrock', 'OpenCV', 'RAG pipelines', 'NLP / text classification'],
+    items: ['PyTorch', 'scikit-learn', 'LangGraph', 'Azure OpenAI', 'Agentic Search', 'ReACT / Planner Agents', 'LLM-as-a-judge & HITL Evals'],
   },
   {
     category: 'Web',
@@ -18,6 +18,10 @@ export const SKILLS: SkillCategory[] = [
   },
   {
     category: 'Tools & Cloud',
-    items: ['Git', 'Docker', 'AWS', 'GitHub Actions', 'PostgreSQL', 'Linux'],
+    items: ['Git', 'Docker', 'AWS', 'GitHub Actions', 'PostgreSQL', 'Linux', 'OTEL', 'Braintrust', 'Weights & Biases'],
   },
+  {
+    category: 'GenAI SDKs',
+    items: ['Claude SDK', 'OpenAI SDK', 'Google GenAI SDK', 'Pydantic-AI'],
+  }
 ];

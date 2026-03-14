@@ -25,10 +25,10 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
     if (rerender && subCmd === 'go' && !isNaN(targetNum)) {
       const project = projects[targetNum - 1];
       if (project) {
-        // Prefer the first external link; fall back to the slug-based path
-        const url = project.links.find((l) => l.href.startsWith('http'))?.href
-          ?? `/projects/${project.slug}/`;
-        window.open(url, '_blank');
+        const url = project.links.find((l) => l.href.startsWith('http'))?.href;
+        if (url) {
+          window.open(url, '_blank');
+        }
       }
     }
   }, [rerender]);
@@ -57,6 +57,14 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
     }
     // Valid "go" — opening handled by useEffect above, show brief feedback
     const p = projects[targetNum - 1];
+    const hasExternalLink = p.links?.some((l) => l.href.startsWith('http'));
+    if (!hasExternalLink) {
+      return (
+        <div className="term-error">
+          No public repository available for <span className="term-accent2">{p.title}</span>.
+        </div>
+      );
+    }
     return <div className="term-dim">Opening <span className="term-accent2">{p.title}</span>...</div>;
   }
 

@@ -1,13 +1,12 @@
 {
   "section": "experience",
-  "title": "Applied Scientist",
+  "title": "Applied Scientist & AI Engineer",
   "organization": "Thomson Reuters",
   "location": "Eagan, MN",
   "start": "2025-04",
   "bullets": [
     "Build agentic AI systems for tax, audit, and accounting domains.",
-    "Design LLM orchestration, retrieval workflows, and robust evaluation/guardrails.",
-    "Ship practitioner-focused assistants grounded in NLP/RAG best practices."
+    "Design agentic search strategies, ReACT flows, and robust LLM orchestration workflows.",
+    "Develop sophisticated evaluation frameworks (LLM-as-a-judge, HITL annotations) and OTEL observability to guarantee answer quality and structural guardrails."
   ]
 }
-
