@@ -1,0 +1,299 @@
+/* ============================================================
+   Terminal Portfolio — Global Styles
+   No Tailwind. Pure CSS with custom properties for theming.
+   ============================================================ */
+
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap');
+
+/* ── Theme: CSS custom properties ─────────────────────────── */
+:root,
+[data-theme='green'] {
+  --bg:          #0d1117;
+  --surface:     #161b22;
+  --text:        #c9d1d9;
+  --text-dim:    #6e7681;
+  --accent:      #39d353;     /* prompt username */
+  --accent2:     #58a6ff;     /* hostname */
+  --accent3:     #f0883e;     /* command highlight */
+  --error:       #f85149;
+  --link:        #58a6ff;
+  --glow:        rgba(57, 211, 83, 0.35);
+  --cursor-color:#39d353;
+  --scanline:    rgba(0, 0, 0, 0.18);
+}
+
+[data-theme='amber'] {
+  --bg:          #1a1200;
+  --surface:     #231900;
+  --text:        #e8d8b0;
+  --text-dim:    #7a6a44;
+  --accent:      #ffb000;
+  --accent2:     #ff8c00;
+  --accent3:     #ffd700;
+  --error:       #ff4444;
+  --link:        #ffd700;
+  --glow:        rgba(255, 176, 0, 0.35);
+  --cursor-color:#ffb000;
+  --scanline:    rgba(0, 0, 0, 0.20);
+}
+
+[data-theme='dracula'] {
+  --bg:          #282a36;
+  --surface:     #343746;
+  --text:        #f8f8f2;
+  --text-dim:    #6272a4;
+  --accent:      #50fa7b;
+  --accent2:     #8be9fd;
+  --accent3:     #ffb86c;
+  --error:       #ff5555;
+  --link:        #bd93f9;
+  --glow:        rgba(80, 250, 123, 0.30);
+  --cursor-color:#ff79c6;
+  --scanline:    rgba(0, 0, 0, 0.12);
+}
+
+[data-theme='matrix'] {
+  --bg:          #000000;
+  --surface:     #001100;
+  --text:        #00ff41;
+  --text-dim:    #007a1f;
+  --accent:      #00ff41;
+  --accent2:     #00dd37;
+  --accent3:     #00bb2e;
+  --error:       #ff0000;
+  --link:        #00ff41;
+  --glow:        rgba(0, 255, 65, 0.55);
+  --cursor-color:#00ff41;
+  --scanline:    rgba(0, 0, 0, 0.25);
+}
+
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Terminal controls scrolling internally */
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── CRT Scanline overlay ─────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    var(--scanline) 0px,
+    var(--scanline) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+}
+
+/* ── Terminal wrapper ─────────────────────────────────────── */
+#terminal-root {
+  height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem 6rem;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar */
+#terminal-root::-webkit-scrollbar { width: 6px; }
+#terminal-root::-webkit-scrollbar-track { background: var(--bg); }
+#terminal-root::-webkit-scrollbar-thumb { background: var(--text-dim); border-radius: 3px; }
+#terminal-root::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ── Input row ────────────────────────────────────────────── */
+.term-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+}
+
+.term-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: var(--cursor-color);
+  caret-shape: block; /* block caret where supported */
+}
+
+/* ── Blinking cursor (fallback for non-supporting browsers) ── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.term-cursor {
+  display: inline-block;
+  width: 0.6ch;
+  height: 1em;
+  background: var(--cursor-color);
+  vertical-align: text-bottom;
+  animation: blink 1.1s step-end infinite;
+  box-shadow: 0 0 4px var(--cursor-color);
+}
+
+/* ── Prompt parts ─────────────────────────────────────────── */
+.prompt-user     { color: var(--accent);  font-weight: 700; }
+.prompt-at       { color: var(--text); }
+.prompt-host     { color: var(--accent2); font-weight: 700; }
+.prompt-path     { color: var(--text-dim); }
+.prompt-dollar   { color: var(--text); }
+
+/* ── Command output ───────────────────────────────────────── */
+.term-output {
+  margin-bottom: 0.25rem;
+  padding: 0.1rem 0;
+}
+
+.term-cmd-echo { color: var(--text-dim); font-style: italic; }
+.term-error    { color: var(--error); }
+.term-link     { color: var(--link); text-decoration: underline; cursor: pointer; }
+.term-link:hover { opacity: 0.8; }
+.term-accent   { color: var(--accent); }
+.term-accent2  { color: var(--accent2); }
+.term-accent3  { color: var(--accent3); }
+.term-dim      { color: var(--text-dim); }
+
+/* ── Tab completion hints ─────────────────────────────────── */
+.term-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: var(--accent3);
+  padding: 0.25rem 0;
+}
+
+/* ── Welcome / ASCII art ──────────────────────────────────── */
+.term-ascii {
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--glow);
+  white-space: pre;
+  line-height: 1.2;
+  font-size: 0.8em;
+  overflow-x: auto;
+}
+
+.term-ascii-mobile {
+  display: none;
+}
+
+/* ── Section headers in command output ────────────────────── */
+.term-section-header {
+  color: var(--accent3);
+  font-weight: 700;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--surface);
+  padding-bottom: 0.1rem;
+}
+
+/* ── Help table ───────────────────────────────────────────── */
+.term-help-row {
+  display: grid;
+  grid-template-columns: 12ch 1fr;
+  gap: 0.5rem;
+  padding: 0.1rem 0;
+}
+
+/* ── Projects / blog / socials list items ─────────────────── */
+.term-list-item {
+  display: grid;
+  grid-template-columns: 3ch 1fr;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+  align-items: start;
+}
+
+.term-list-num  { color: var(--accent3); font-weight: 700; }
+.term-list-body {}
+.term-list-title { color: var(--accent2); font-weight: 500; }
+.term-list-desc  { color: var(--text-dim); font-size: 0.9em; }
+.term-list-tags  { color: var(--text-dim); font-size: 0.85em; }
+
+/* ── Resume entries ───────────────────────────────────────── */
+.term-resume-entry {
+  margin: 0.5rem 0 0.75rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--surface);
+}
+
+.term-resume-title { color: var(--accent2); font-weight: 700; }
+.term-resume-org   { color: var(--accent3); }
+.term-resume-meta  { color: var(--text-dim); font-size: 0.85em; }
+.term-resume-bullets { list-style: none; margin-top: 0.25rem; }
+.term-resume-bullets li::before { content: '• '; color: var(--accent); }
+.term-resume-bullets li { margin-bottom: 0.15rem; font-size: 0.9em; }
+
+/* ── Skills ───────────────────────────────────────────────── */
+.term-skills-row {
+  display: grid;
+  grid-template-columns: 16ch 1fr;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+  align-items: start;
+}
+
+.term-skills-cat   { color: var(--accent3); font-weight: 700; }
+.term-skills-items { color: var(--text); }
+
+/* ── Separator ────────────────────────────────────────────── */
+.term-sep {
+  color: var(--text-dim);
+  margin: 0.4rem 0;
+  user-select: none;
+}
+
+/* ── Themes list ──────────────────────────────────────────── */
+.term-theme-swatch {
+  display: inline-block;
+  width: 1ch;
+  height: 1em;
+  vertical-align: text-bottom;
+  margin-right: 0.5rem;
+  border-radius: 2px;
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  body { font-size: 13px; }
+
+  #terminal-root {
+    padding: 0.75rem 0.9rem 8rem;
+  }
+
+  .term-ascii         { display: none; }
+  .term-ascii-mobile  { display: block; }
+
+  .prompt-host,
+  .prompt-path,
+  .prompt-at { display: none; }
+
+  .term-help-row        { grid-template-columns: 10ch 1fr; }
+  .term-skills-row      { grid-template-columns: 1fr; }
+  .term-resume-entry    { padding-left: 0.5rem; }
+}
