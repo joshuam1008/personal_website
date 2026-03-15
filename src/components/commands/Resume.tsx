@@ -47,9 +47,16 @@ const Resume: React.FC<ResumeProps> = ({ resume }) => {
   const { arg } = useContext(termContext);
 
   const filter = arg[0]?.toLowerCase();
-  const experience = resume.filter((e) => e.section === 'experience');
-  const education  = resume.filter((e) => e.section === 'education');
-  const highlights = resume.filter((e) => e.section === 'highlight');
+
+  const experience: ResumeEntry[] = [];
+  const education: ResumeEntry[] = [];
+  const highlights: ResumeEntry[] = [];
+
+  for (const entry of resume) {
+    if (entry.section === 'experience') experience.push(entry);
+    else if (entry.section === 'education') education.push(entry);
+    else if (entry.section === 'highlight') highlights.push(entry);
+  }
 
   // Determine what to show based on sub-command arg
   const showExp  = !filter || filter === 'experience';
