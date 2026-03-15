@@ -9,7 +9,7 @@ import TermPrompt from './TermPrompt';
 import { COMMAND_NAMES, COMMANDS } from '../data/commands';
 import { applyTheme, THEMES, type ThemeName } from './commands/Themes';
 import { SOCIALS } from '../data/socials';
-import { termContext, type TermContextValue } from './termContext';
+import { termContext } from './termContext';
 import type { ResumeEntry } from './commands/Resume';
 import type { ProjectEntry } from './commands/Projects';
 import type { BlogEntry } from './commands/Blog';
@@ -267,7 +267,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
       {cmdHistory.map((entry, index) => {
         const isLatest = entry.id === latestId;
         const isValid = VALID_CMDS.has(entry.cmd);
-        const contextValue: TermContextValue = {
+        const contextValue = {
           arg: entry.args,
           history: navHistory,
           rerender: isLatest,
