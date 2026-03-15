@@ -1,19 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { termContext } from '../termContext';
-
-export const THEMES = [
-  { name: 'green',   label: 'Green on Black (default)', swatch: '#39d353' },
-  { name: 'amber',   label: 'Amber on Black',           swatch: '#ffb000' },
-  { name: 'dracula', label: 'Dracula',                  swatch: '#bd93f9' },
-  { name: 'matrix',  label: 'Matrix',                   swatch: '#00ff41' },
-] as const;
-
-export type ThemeName = (typeof THEMES)[number]['name'];
-
-export function applyTheme(name: ThemeName) {
-  document.documentElement.setAttribute('data-theme', name);
-  localStorage.setItem('terminal-theme', name);
-}
+import { applyTheme, THEMES, type ThemeName } from '../../lib/theme';
 
 const Themes: React.FC = () => {
   const { arg, rerender } = useContext(termContext);
