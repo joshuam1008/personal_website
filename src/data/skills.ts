@@ -18,15 +18,32 @@ export const SKILLS: SkillCategory[] = [
   },
   {
     category: "ML / DL / AI",
-    items: ["PyTorch", "scikit-learn", "HuggingFace", "BERT", "Transformers", "LLMs"],
+    items: [
+      "PyTorch",
+      "scikit-learn",
+      "HuggingFace",
+      "BERT",
+      "Transformers",
+      "LLMs",
+    ],
+  },
+  {
+    category: "Agent SDKs",
+    items: [
+      "LangGraph",
+      "Claude Agent SDK",
+      "OpenAI Agents SDK",
+      "Google ADK",
+      "Pydantic-AI",
+    ],
   },
   {
     category: "Agentic AI",
     items: [
-      "LangGraph",
       "Agentic Search",
       "ReACT / Planner Agents",
       "LLM-as-a-judge & HITL Evals",
+      "Self-learning Autoevals",
     ],
   },
   {
@@ -45,16 +62,6 @@ export const SKILLS: SkillCategory[] = [
       "OTEL",
       "Braintrust",
       "Weights & Biases",
-    ],
-  },
-  {
-    category: "GenAI SDKs",
-    items: [
-      "Claude SDK",
-      "OpenAI SDK",
-      "Google GenAI SDK",
-      "Pydantic-AI",
-      "Azure OpenAI",
     ],
   },
 ];
