@@ -11,7 +11,7 @@ const Socials: React.FC = () => {
   useEffect(() => {
     if (rerender && subCmd === 'go' && !isNaN(targetNum)) {
       const social = SOCIALS[targetNum - 1];
-      if (social) window.open(social.url, '_blank');
+      if (social) window.open(social.url, '_blank', 'noopener,noreferrer');
     }
   }, [rerender]);
 

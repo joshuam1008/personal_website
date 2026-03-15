@@ -27,7 +27,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
       if (project) {
         const url = project.links.find((l) => l.href.startsWith('http'))?.href;
         if (url) {
-          window.open(url, '_blank');
+          window.open(url, '_blank', 'noopener,noreferrer');
         }
       }
     }

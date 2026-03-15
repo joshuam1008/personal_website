@@ -27,7 +27,7 @@ const Blog: React.FC<BlogProps> = ({ blog }) => {
   // "blog read <slug>" — open post in new tab
   useEffect(() => {
     if (rerender && subCmd === 'read' && slugArg) {
-      window.open(`/blog/${slugArg}/`, '_blank');
+      window.open(`/blog/${slugArg}/`, '_blank', 'noopener,noreferrer');
     }
   }, [rerender]);
 
