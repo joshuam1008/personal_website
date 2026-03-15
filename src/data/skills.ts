@@ -5,23 +5,56 @@ export type SkillCategory = {
 
 export const SKILLS: SkillCategory[] = [
   {
-    category: 'Languages',
-    items: ['Python', 'TypeScript', 'C++', 'C', 'Java', 'SQL', 'Mandarin Chinese'],
+    category: "Languages",
+    items: [
+      "Python",
+      "TypeScript",
+      "C++",
+      "C",
+      "Java",
+      "SQL",
+      "Mandarin Chinese",
+    ],
   },
   {
-    category: 'ML / AI',
-    items: ['PyTorch', 'scikit-learn', 'LangGraph', 'Azure OpenAI', 'Agentic Search', 'ReACT / Planner Agents', 'LLM-as-a-judge & HITL Evals'],
+    category: "ML / DL / AI",
+    items: ["PyTorch", "scikit-learn", "HuggingFace", "BERT", "Transformers", "LLMs"],
   },
   {
-    category: 'Web',
-    items: ['React', 'Astro', 'Next.js', 'Node.js', 'REST APIs'],
+    category: "Agentic AI",
+    items: [
+      "LangGraph",
+      "Agentic Search",
+      "ReACT / Planner Agents",
+      "LLM-as-a-judge & HITL Evals",
+    ],
   },
   {
-    category: 'Tools & Cloud',
-    items: ['Git', 'Docker', 'AWS', 'GitHub Actions', 'PostgreSQL', 'Linux', 'OTEL', 'Braintrust', 'Weights & Biases'],
+    category: "Web",
+    items: ["React", "Astro", "Next.js", "Node.js", "REST APIs"],
   },
   {
-    category: 'GenAI SDKs',
-    items: ['Claude SDK', 'OpenAI SDK', 'Google GenAI SDK', 'Pydantic-AI'],
-  }
+    category: "Tools & Cloud",
+    items: [
+      "Git",
+      "Docker",
+      "AWS",
+      "GitHub Actions",
+      "PostgreSQL",
+      "Linux",
+      "OTEL",
+      "Braintrust",
+      "Weights & Biases",
+    ],
+  },
+  {
+    category: "GenAI SDKs",
+    items: [
+      "Claude SDK",
+      "OpenAI SDK",
+      "Google GenAI SDK",
+      "Pydantic-AI",
+      "Azure OpenAI",
+    ],
+  },
 ];

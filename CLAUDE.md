@@ -52,15 +52,13 @@ Configured in [astro.config.mjs](astro.config.mjs):
 - `@config` → `./src/config`
 
 ### Theme System
-The site supports multiple themes via [src/config/themes.ts](src/config/themes.ts):
-- **Dark Glassmorphism** (default) - Current design with indigo/pink gradients
-- **Matrix Terminal** - Black/green CRT aesthetic with scanlines and Matrix rain effect
-- **Neon Cyberpunk** - Hot pink/cyan with neon glows
-- **Minimal Light** - Clean white theme for daytime use
-- **Dracula** - Purple/pink pastels
-- **Nord** - Cool blues and whites
+The terminal supports 4 themes, switchable via `themes set <name>` command ([src/components/commands/Themes.tsx](src/components/commands/Themes.tsx)):
+- **green** (default) - Green on black
+- **amber** - Amber on black
+- **dracula** - Dracula color scheme
+- **matrix** - Matrix green effect
 
-Theme selection dropdown in header ([ThemeSelector.tsx](src/components/ThemeSelector.tsx)). Settings stored in `localStorage`. All themes use CSS custom properties for dynamic color switching.
+Theme selection stored in `localStorage` via `terminal-theme` key and applied on page load to avoid flash.
 
 ### Animation System
 Configurable animation system via [src/config/animations.ts](src/config/animations.ts):
