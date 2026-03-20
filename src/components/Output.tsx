@@ -18,6 +18,12 @@ import Echo from './commands/Echo';
 import Clear from './commands/Clear';
 import History from './commands/History';
 import Whoami from './commands/Whoami';
+import Open from './commands/Open';
+import Pwd from './commands/Pwd';
+import Ls from './commands/Ls';
+import Cat from './commands/Cat';
+import Cd from './commands/Cd';
+import Neofetch from './commands/Neofetch';
 
 interface OutputProps {
   cmd: string;
@@ -47,6 +53,12 @@ const Output: React.FC<OutputProps> = ({ cmd, resume, projects, blog }) => {
     case 'clear':    return <Clear />;
     case 'history':  return <History />;
     case 'whoami':   return <Whoami />;
+    case 'open':     return <Open />;
+    case 'pwd':      return <Pwd />;
+    case 'ls':       return <Ls />;
+    case 'cat':      return <Cat />;
+    case 'cd':       return <Cd />;
+    case 'neofetch': return <Neofetch />;
     default:
       return (
         <div className="term-error">
