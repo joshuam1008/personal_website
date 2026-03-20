@@ -1,6 +1,8 @@
 import React, {
   useCallback,
+  useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -10,6 +12,8 @@ import { COMMAND_NAMES, COMMANDS } from '../data/commands';
 import { applyTheme, THEMES, type ThemeName } from './commands/Themes';
 import { SOCIALS } from '../data/socials';
 import { termContext, type TermContextValue } from './termContext';
+import { WindowManagerContext } from './WindowManager';
+import { buildFilesystem, getNode, resolvePath } from '../lib/filesystem';
 import type { ResumeEntry } from './commands/Resume';
 import type { ProjectEntry } from './commands/Projects';
 import type { BlogEntry } from './commands/Blog';
@@ -39,6 +43,7 @@ const uid = () => `cmd-${Date.now()}-${counter++}`;
 const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const wmContext = useContext(WindowManagerContext);
 
   const [inputVal, setInputVal] = useState('');
   // Each entry represents a submitted command in order (oldest first)
@@ -53,6 +58,9 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
   const [hints, setHints] = useState<string[]>([]);
   // Set to the id of the most recent entry on submit (triggers useEffects in commands)
   const [latestId, setLatestId] = useState<string>('');
+  // Virtual filesystem state
+  const [currentPath, setCurrentPath] = useState('/home/visitor');
+  const filesystem = useMemo(() => buildFilesystem(projects, blog), []);
 
   // ── Focus management ─────────────────────────────────────
   const focusInput = useCallback(() => {
@@ -159,7 +167,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
           // Attempt to autocomplete a subcommand
           const baseCmd = tokens[0].toLowerCase();
           const prefix = tokens[1].toLowerCase();
-          
+
           const commandInfo = COMMANDS.find((c) => c.cmd === baseCmd);
           if (commandInfo?.subCommands) {
             const matches = commandInfo.subCommands.filter((sub) => sub.startsWith(prefix));
@@ -168,6 +176,29 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
               setHints([]);
             } else if (matches.length > 1) {
               setHints(matches);
+            }
+          } else if (['cat', 'cd', 'ls', 'open'].includes(baseCmd)) {
+            // Filesystem path completion
+            const partial = tokens[1];
+            const lastSlash = partial.lastIndexOf('/');
+            const parentPart = lastSlash >= 0 ? partial.slice(0, lastSlash + 1) : '';
+            const namePart = lastSlash >= 0 ? partial.slice(lastSlash + 1) : partial;
+            const resolvedParent = parentPart
+              ? resolvePath(parentPart.replace(/\/$/, '') || '/', currentPath)
+              : currentPath;
+            const dirNode = getNode(filesystem, resolvedParent);
+            if (dirNode?.type === 'dir' && dirNode.children) {
+              const matches = Object.keys(dirNode.children).filter((name) =>
+                name.toLowerCase().startsWith(namePart.toLowerCase())
+              );
+              if (matches.length === 1) {
+                const completed = parentPart + matches[0];
+                const isDir = dirNode.children[matches[0]]?.type === 'dir';
+                setInputVal(`${baseCmd} ${completed}${isDir ? '/' : ' '}`);
+                setHints([]);
+              } else if (matches.length > 1) {
+                setHints(matches);
+              }
             }
           }
         } else if (tokens.length === 3) {
@@ -205,6 +236,13 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
           const exactCmd = COMMANDS.find((c) => c.cmd === tokens[0]);
           if (exactCmd?.subCommands) {
             setHints(exactCmd.subCommands);
+          } else if (['cat', 'cd', 'ls', 'open'].includes(tokens[0].toLowerCase())) {
+            const dirNode = getNode(filesystem, currentPath);
+            if (dirNode?.type === 'dir' && dirNode.children) {
+              setHints(Object.keys(dirNode.children));
+            } else {
+              setHints([]);
+            }
           } else {
             setHints([]);
           }
@@ -273,6 +311,10 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
           rerender: isLatest,
           index,
           clearHistory,
+          openWindow: wmContext?.openWindow,
+          currentPath,
+          setCurrentPath,
+          filesystem,
         };
 
         return (
@@ -280,7 +322,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
             {/* Echo the command that was entered (skip for auto-ran welcome) */}
             {entry.raw !== 'welcome' && (
               <div className="term-input-row" style={{ marginBottom: '0.15rem' }}>
-                <TermPrompt />
+                <TermPrompt path={currentPath} />
                 <span className="term-cmd-echo">{entry.raw}</span>
               </div>
             )}
@@ -315,7 +357,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
 
       {/* Active input row */}
       <form onSubmit={handleSubmit} className="term-input-row">
-        <TermPrompt />
+        <TermPrompt path={currentPath} />
         <input
           ref={inputRef}
           id="terminal-input"

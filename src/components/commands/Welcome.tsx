@@ -49,7 +49,7 @@ const Welcome: React.FC<WelcomeProps> = () => {
         <span>Thomson Reuters</span>
       </p>
       <p className="term-dim" style={{ marginTop: '0.25rem' }}>
-        Type <span className="term-accent3">help</span> for available commands.
+        Click desktop icons or type <span className="term-accent3">help</span> for commands.
         Use <span className="term-accent3">Tab</span> to autocomplete,{' '}
         <span className="term-accent3">↑↓</span> for history.
       </p>

@@ -1,7 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
-import Terminal from '@components/Terminal';
+import { Desktop } from '@components/Desktop';
 import '@styles/terminal.css';
+import '@styles/os.css';
 import type { ResumeEntry } from '@components/commands/Resume';
 import type { ProjectEntry } from '@components/commands/Projects';
 import type { BlogEntry } from '@components/commands/Blog';
@@ -62,8 +63,8 @@ const blog: BlogEntry[] = rawBlog
     // Omit heroImage
   }));
 
-const title = 'Joshua Mason — Terminal Portfolio';
-const description = 'Applied Scientist & AI Engineer specializing in agentic systems and search. Interactive terminal portfolio.';
+const title = 'Joshua Mason — Portfolio';
+const description = 'Applied Scientist & AI Engineer specializing in agentic systems and search. Interactive desktop portfolio.';
 const ogImage = '/headshot-small.jpg';
 ---
 
@@ -94,18 +95,18 @@ const ogImage = '/headshot-small.jpg';
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Google Fonts: IBM Plex Mono -->
+    <!-- Google Fonts: IBM Plex Mono (terminal) + JetBrains Mono (OS chrome) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
       as="style"
       onload="this.onload=null;this.rel='stylesheet'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
         rel="stylesheet"
       />
     </noscript>
@@ -144,7 +145,7 @@ const ogImage = '/headshot-small.jpg';
     <!-- Hidden h1 for screen readers and SEO crawlers -->
     <h1 class="sr-only">Joshua Mason — Terminal Portfolio</h1>
 
-    <Terminal
+    <Desktop
       resume={resume}
       projects={projects}
       blog={blog}

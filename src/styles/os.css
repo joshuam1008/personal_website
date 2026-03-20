@@ -1,0 +1,505 @@
+/* ============================================================
+   OS Desktop Environment — Chrome & Window System Styling
+   All colors use existing terminal theme CSS variables.
+   No glass morphism. Solid backgrounds only.
+   ============================================================ */
+
+/* ── Boot screen ──────────────────────────────────────────── */
+#os-boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease;
+}
+#os-boot-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.boot-text {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: var(--accent);
+  white-space: pre;
+  line-height: 1.8;
+  text-shadow: 0 0 6px var(--glow);
+}
+.boot-progress {
+  width: min(400px, 80vw);
+  height: 3px;
+  background: var(--surface);
+  margin-top: 1.5rem;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.boot-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+/* ── Top taskbar ──────────────────────────────────────────── */
+.os-topbar {
+  position: relative;
+  flex-shrink: 0;
+  height: var(--bar-height);
+  background: var(--bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 10;
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.os-topbar .task-left {
+  color: var(--accent);
+  font-weight: 700;
+}
+.os-topbar .task-right {
+  color: var(--text-dim);
+}
+
+/* ── Desktop environment wrapper ──────────────────────────── */
+.os-desktop-env {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.os-desktop-env.visible {
+  opacity: 1;
+}
+
+/* ── Desktop area ─────────────────────────────────────────── */
+.os-desktop {
+  position: relative;
+  flex: 1;
+  z-index: 1;
+  background: var(--bg);
+  padding: clamp(16px, 3vw, 32px);
+  overflow: hidden;
+}
+/* Optional subtle noise texture for visual interest */
+.os-desktop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Desktop icons ────────────────────────────────────────── */
+.os-desktop-icons {
+  position: absolute;
+  top: clamp(12px, 3vh, 32px);
+  left: clamp(12px, 3vw, 32px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  z-index: 1;
+}
+.os-desktop-icon {
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+.os-desktop-icon .icon-art {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--surface);
+  border-radius: 8px;
+  color: var(--accent);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.os-desktop-icon .icon-label {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+.os-desktop-icon:hover .icon-art,
+.os-desktop-icon:focus-visible .icon-art {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--glow);
+}
+
+/* ── Window system ────────────────────────────────────────── */
+.os-window {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.7);
+  border-radius: 6px;
+  color: var(--text);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  min-width: 240px;
+  animation: window-open 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.os-window.active {
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 30px var(--glow);
+}
+.os-window.maximized {
+  position: absolute;
+  inset: 0;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0;
+  transform: none !important;
+}
+.os-window.minimized {
+  display: none;
+}
+
+.os-window-header {
+  background: var(--bg);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: grab;
+  user-select: none;
+  position: relative;
+}
+.os-window-header:active {
+  cursor: grabbing;
+}
+.os-window-title {
+  font-size: 0.72rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.os-window-actions {
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+.os-window-btn {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.os-window-btn.close {
+  background: #ff5f57;
+}
+.os-window-btn.minimize {
+  background: #febc2e;
+}
+.os-window-btn.maximize {
+  background: #28c840;
+}
+.os-window-btn:hover {
+  filter: brightness(1.2);
+}
+
+.os-window-body {
+  padding: 0;
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+}
+
+.os-window-resizer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  cursor: se-resize;
+  background: linear-gradient(135deg, transparent 0 50%, var(--text-dim) 50%);
+  opacity: 0.3;
+}
+.os-window-resizer:hover {
+  opacity: 0.6;
+}
+
+@keyframes window-open {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+@keyframes window-close {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+/* ── Bottom taskbar ───────────────────────────────────────── */
+.os-taskbar-bottom {
+  position: relative;
+  flex-shrink: 0;
+  height: var(--bar-height);
+  background: var(--bg);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px 16px 0 0;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 10;
+}
+.os-taskbar-apps {
+  display: flex;
+  gap: 6px;
+}
+.os-taskbar-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, color 0.15s;
+}
+.os-taskbar-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--text);
+}
+.os-taskbar-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 8px var(--glow);
+}
+.tray-label {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Content window styles ────────────────────────────────── */
+.info-window-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  line-height: 1.65;
+}
+.info-card {
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 16px;
+}
+.info-card-title {
+  color: var(--accent2);
+  font-weight: 700;
+  font-size: 0.8rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.info-hero {
+  text-align: center;
+  padding: 24px 0 16px;
+}
+.info-hero h2 {
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  margin-bottom: 4px;
+}
+.info-hero p {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+.experience-row {
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--accent);
+  margin: 1.25rem 0;
+}
+.experience-row:first-child {
+  margin-top: 0;
+}
+.experience-row .exp-title {
+  color: var(--accent2);
+  font-weight: 600;
+  font-size: 0.95em;
+  margin-bottom: 2px;
+}
+.experience-row .exp-org {
+  color: var(--accent3);
+  font-size: 0.9em;
+  margin-bottom: 2px;
+}
+.experience-row .exp-date {
+  color: var(--text-dim);
+  font-size: 0.82em;
+  margin-bottom: 4px;
+}
+.experience-row ul {
+  list-style: none;
+  margin-top: 0.6rem;
+}
+.experience-row li::before {
+  content: '› ';
+  color: var(--accent);
+}
+.experience-row li {
+  font-size: 0.88em;
+  margin-bottom: 0.4rem;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.skills-tags span {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: var(--text);
+}
+.contact-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  align-items: center;
+}
+.contact-row .contact-label {
+  color: var(--accent3);
+  font-weight: 700;
+  width: 8ch;
+}
+.contact-row a {
+  color: var(--link);
+  text-decoration: underline;
+}
+.contact-row a:hover {
+  opacity: 0.8;
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .os-desktop-icons {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 8px 12px;
+    -webkit-overflow-scrolling: touch;
+    top: auto;
+    left: auto;
+  }
+  .os-desktop-icon {
+    width: 60px;
+  }
+  .os-desktop-icon .icon-art {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+  .os-desktop-icon .icon-label {
+    font-size: 0.6rem;
+  }
+
+  .os-window {
+    width: calc(100% - 16px) !important;
+    left: 8px !important;
+    right: 8px !important;
+    top: auto !important;
+    position: relative !important;
+    max-height: calc(100vh - var(--bar-height) * 2 - 80px);
+  }
+  .os-window-header {
+    cursor: default !important;
+  }
+  .os-window-resizer {
+    display: none;
+  }
+
+  .os-topbar {
+    font-size: 0.65rem;
+    padding: 0 0.6rem;
+  }
+  .os-taskbar-btn {
+    font-size: 0.55rem;
+    padding: 3px 6px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .os-desktop {
+    padding: 8px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
