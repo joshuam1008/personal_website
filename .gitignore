@@ -32,3 +32,7 @@ local_memory/
 
 # cocoindex code index
 .cocoindex_code/
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
