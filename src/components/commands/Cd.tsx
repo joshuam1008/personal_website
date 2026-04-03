@@ -5,7 +5,6 @@ import { resolvePath, normalizePath, getNode, formatPath } from '../../lib/files
 const Cd = () => {
   const {
     arg,
-    rerender,
     currentPath = '/home/visitor',
     setCurrentPath,
     filesystem,
@@ -19,17 +18,13 @@ const Cd = () => {
   const node = getNode(filesystem, resolved);
   const isValid = !!(node && node.type === 'dir');
 
-  // Side effect: update current path after commit, not during render.
-  // Calling setCurrentPath during render caused Terminal to re-render with the
-  // updated path, which made Cd re-evaluate the relative target against the new
-  // currentPath (e.g. "blog" from "/home/visitor/blog" → "/home/visitor/blog/blog"),
-  // resulting in a spurious "not found" error on the second render.
+  // setCurrentPath is only provided for the latest entry, so this only fires once.
   useEffect(() => {
-    if (rerender && isValid && setCurrentPath) {
+    if (isValid && setCurrentPath) {
       setCurrentPath(resolved);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rerender]);
+  }, []);
 
   if (!isValid) {
     return (

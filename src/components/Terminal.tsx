@@ -313,8 +313,8 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
           index,
           clearHistory,
           openWindow: wmContext?.openWindow,
-          currentPath,
-          setCurrentPath,
+          currentPath: entry.path,
+          setCurrentPath: isLatest ? setCurrentPath : undefined,
           filesystem,
         };
 
