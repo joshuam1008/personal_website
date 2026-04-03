@@ -32,3 +32,15 @@ local_memory/
 
 # cocoindex code index
 .cocoindex_code/
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
+
+# context-mode sandbox temp files (UUID-named, dropped in CWD)
+[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]-????-????-????-????????????
+
+# CLAUDE.md
+CLAUDE.md
+.beads/
+.beads/

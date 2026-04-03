@@ -30,6 +30,7 @@ type HistoryEntry = {
   raw: string;         // raw input string
   cmd: string;         // first token (the command name)
   args: string[];      // remaining tokens
+  path: string;        // working directory at time of submission
 };
 
 // ── Constants ──────────────────────────────────────────────
@@ -49,7 +50,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
   // Each entry represents a submitted command in order (oldest first)
   const [cmdHistory, setCmdHistory] = useState<HistoryEntry[]>([
     // Auto-run "welcome" on mount
-    { id: uid(), raw: 'welcome', cmd: 'welcome', args: [] },
+    { id: uid(), raw: 'welcome', cmd: 'welcome', args: [], path: '/home/visitor' },
   ]);
   // String list for ↑↓ navigation (most-recent first)
   const [navHistory, setNavHistory] = useState<string[]>([]);
@@ -121,7 +122,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
       setNavHistory((prev) => [raw, ...prev]);
     }
 
-    setCmdHistory((prev) => [...prev, { id, raw, cmd, args }]);
+    setCmdHistory((prev) => [...prev, { id, raw, cmd, args, path: currentPath }]);
   };
 
   // ── Keyboard: history navigation + tab-complete + Ctrl+L ─
@@ -312,8 +313,8 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
           index,
           clearHistory,
           openWindow: wmContext?.openWindow,
-          currentPath,
-          setCurrentPath,
+          currentPath: entry.path,
+          setCurrentPath: isLatest ? setCurrentPath : undefined,
           filesystem,
         };
 
@@ -322,7 +323,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
             {/* Echo the command that was entered (skip for auto-ran welcome) */}
             {entry.raw !== 'welcome' && (
               <div className="term-input-row" style={{ marginBottom: '0.15rem' }}>
-                <TermPrompt path={currentPath} />
+                <TermPrompt path={entry.path} />
                 <span className="term-cmd-echo">{entry.raw}</span>
               </div>
             )}
