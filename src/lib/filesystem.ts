@@ -1,5 +1,5 @@
-import { SKILLS } from "../data/skills";
-import { SOCIALS } from "../data/socials";
+import { SKILLS } from "../data/skills.ts";
+import { SOCIALS } from "../data/socials.ts";
 
 // ── Types ────────────────────────────────────────────────────
 export type FileSystemNode = {
