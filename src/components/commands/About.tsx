@@ -23,7 +23,7 @@ const About: React.FC = () => {
       </p>
 
       <p
-        className="term-dim"
+        className="term-body"
         style={{ marginTop: "0.75rem", fontSize: "0.85em" }}
       >
         Try: <span className="term-accent3">resume</span> ·{" "}

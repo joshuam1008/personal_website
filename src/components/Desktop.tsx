@@ -30,6 +30,18 @@ const ICONS = [
   { id: 'contact' as const, label: 'Contact', iconArt: '@' },
 ];
 
+// Clamp each window's cascade position so it fits on the current viewport,
+// keeping the header reachable even on a small laptop screen.
+function cascade(index: number, w: number, h: number) {
+  const availW = typeof window !== 'undefined' ? window.innerWidth : 1440;
+  const availH = typeof window !== 'undefined' ? window.innerHeight : 900;
+  const step = 32;
+  return {
+    initialLeft: Math.max(16, Math.min(120 + index * step, availW - w - 16)),
+    initialTop: Math.max(16, Math.min(64 + index * step, availH - h - 100)), // 100 = both bars
+  };
+}
+
 export function Desktop({ resume, projects, blog }: DesktopProps) {
   const [bootComplete, setBootComplete] = useState(false);
 
@@ -57,8 +69,7 @@ export function Desktop({ resume, projects, blog }: DesktopProps) {
             title="terminal"
             initialWidth={820}
             initialHeight={520}
-            initialLeft={200}
-            initialTop={80}
+            {...cascade(0, 820, 520)}
           >
             <Terminal resume={resume} projects={projects} blog={blog} />
           </OSWindow>
@@ -68,8 +79,7 @@ export function Desktop({ resume, projects, blog }: DesktopProps) {
             title="about"
             initialWidth={560}
             initialHeight={440}
-            initialLeft={100}
-            initialTop={150}
+            {...cascade(1, 560, 440)}
           >
             <AboutWindow resume={resume} />
           </OSWindow>
@@ -79,8 +89,7 @@ export function Desktop({ resume, projects, blog }: DesktopProps) {
             title="projects"
             initialWidth={560}
             initialHeight={440}
-            initialLeft={200}
-            initialTop={200}
+            {...cascade(2, 560, 440)}
           >
             <ProjectsWindow projects={projects} />
           </OSWindow>
@@ -90,8 +99,7 @@ export function Desktop({ resume, projects, blog }: DesktopProps) {
             title="blog"
             initialWidth={560}
             initialHeight={440}
-            initialLeft={300}
-            initialTop={250}
+            {...cascade(3, 560, 440)}
           >
             <BlogWindow blog={blog} />
           </OSWindow>
@@ -101,8 +109,7 @@ export function Desktop({ resume, projects, blog }: DesktopProps) {
             title="skills"
             initialWidth={560}
             initialHeight={440}
-            initialLeft={400}
-            initialTop={300}
+            {...cascade(4, 560, 440)}
           >
             <SkillsWindow />
           </OSWindow>
@@ -112,8 +119,7 @@ export function Desktop({ resume, projects, blog }: DesktopProps) {
             title="contact"
             initialWidth={560}
             initialHeight={440}
-            initialLeft={500}
-            initialTop={350}
+            {...cascade(5, 560, 440)}
           >
             <ContactWindow />
           </OSWindow>

@@ -24,7 +24,7 @@ export const COMMANDS: CommandInfo[] = [
   { cmd: 'open',     desc: 'open a window  — try: open <app>', subCommands: ['about', 'projects', 'blog', 'skills', 'contact'] },
   { cmd: 'projects', desc: 'my portfolio  — try: projects list | projects go <n>', subCommands: ['list', 'go'] },
   { cmd: 'pwd',      desc: 'print working directory' },
-  { cmd: 'resume',   desc: 'work history  — try: resume | resume experience | resume education', subCommands: ['experience', 'education'] },
+  { cmd: 'resume',   desc: 'work history  — try: resume | resume experience | resume education | resume highlights', subCommands: ['experience', 'education', 'highlights'] },
   { cmd: 'skills',   desc: 'technologies I work with' },
   { cmd: 'socials',  desc: 'find me online  — try: socials list | socials go <n>', subCommands: ['list', 'go'] },
   { cmd: 'themes',   desc: 'change color theme  — try: themes list | themes set <name>', subCommands: ['list', 'set'] },

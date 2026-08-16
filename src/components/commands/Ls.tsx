@@ -7,20 +7,21 @@ const Ls = () => {
 
   if (!filesystem) return <div className="term-dim">(no filesystem)</div>;
 
-  const targetRaw = arg[0] ?? currentPath;
+  const args = arg.filter((a) => !a.startsWith('-'));
+  const targetRaw = args[0] ?? currentPath;
   const targetPath = normalizePath(resolvePath(targetRaw, currentPath));
   const node = getNode(filesystem, targetPath);
 
   if (!node) {
     return (
       <div className="term-error">
-        ls: <strong>{arg[0] ?? '.'}</strong>: no such file or directory
+        ls: <strong>{args[0] ?? '.'}</strong>: no such file or directory
       </div>
     );
   }
 
   if (node.type === 'file') {
-    return <div className="term-dim">{arg[0]}</div>;
+    return <div className="term-dim">{args[0]}</div>;
   }
 
   const entries = Object.entries(node.children ?? {});

@@ -68,9 +68,11 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
     inputRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    document.addEventListener('click', focusInput);
-    return () => document.removeEventListener('click', focusInput);
+  const handleRootClick = useCallback((e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('a, button')) return;         // let links and controls work
+    if (window.getSelection()?.toString()) return;   // don't destroy a selection
+    focusInput();
   }, [focusInput]);
 
   // Initial focus
@@ -78,22 +80,14 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
 
   // ── Scroll to bottom after any new output ────────────────
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    bottomRef.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
   }, [cmdHistory]);
 
   // ── Restore saved theme on mount ─────────────────────────
   useEffect(() => {
     const saved = localStorage.getItem('terminal-theme') as ThemeName | null;
     if (saved) applyTheme(saved);
-  }, []);
-
-  // ── Prevent page scrolling on ArrowUp/Down ───────────────
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (['ArrowUp', 'ArrowDown'].includes(e.key)) e.preventDefault();
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
   }, []);
 
   // ── clearHistory callback (passed via context to Clear command) ──
@@ -145,7 +139,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
       const tokens = rawTokens.filter((t) => t.length > 0);
 
       // If nothing typed, show all top-level commands
-      if (tokens.length === 0 || (!inputVal && tokens.length === 1)) {
+      if (tokens.length === 0) {
         setHints(COMMAND_NAMES);
         return;
       }
@@ -271,6 +265,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
 
     // ArrowUp — go to older command
     if (e.key === 'ArrowUp') {
+      e.preventDefault();
       const newPtr = Math.min(navPointer + 1, navHistory.length - 1);
       setNavPointer(newPtr);
       setInputVal(navHistory[newPtr] ?? '');
@@ -284,6 +279,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
 
     // ArrowDown — go to newer command (or clear)
     if (e.key === 'ArrowDown') {
+      e.preventDefault();
       if (navPointer <= 0) {
         setNavPointer(-1);
         setInputVal('');
@@ -301,16 +297,16 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
 
   // ── Render ───────────────────────────────────────────────
   return (
-    <div id="terminal-root" onClick={focusInput}>
+    <div id="terminal-root" onClick={handleRootClick}>
       {/* Rendered command history (oldest first) */}
-      {cmdHistory.map((entry, index) => {
+      <div role="log" aria-live="polite" aria-relevant="additions text">
+      {cmdHistory.map((entry) => {
         const isLatest = entry.id === latestId;
         const isValid = VALID_CMDS.has(entry.cmd);
         const contextValue: TermContextValue = {
           arg: entry.args,
           history: navHistory,
           rerender: isLatest,
-          index,
           clearHistory,
           openWindow: wmContext?.openWindow,
           currentPath: entry.path,
@@ -348,6 +344,7 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
           </div>
         );
       })}
+      </div>
 
       {/* Tab-completion hints */}
       {hints.length > 1 && (

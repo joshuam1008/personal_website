@@ -18,7 +18,8 @@ const TermPrompt: React.FC<TermPromptProps> = ({ path }) => {
       <span className="prompt-user">visitor</span>
       <span className="prompt-at">@</span>
       <span className="prompt-host">joshua-mason</span>
-      <span className="prompt-path">:{displayPath}</span>
+      <span className="prompt-colon">:</span>
+      <span className="prompt-path">{displayPath}</span>
       <span className="prompt-dollar">$ </span>
     </span>
   );

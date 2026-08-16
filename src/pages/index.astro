@@ -6,6 +6,7 @@ import '@styles/os.css';
 import type { ResumeEntry } from '@components/commands/Resume';
 import type { ProjectEntry } from '@components/commands/Projects';
 import type { BlogEntry } from '@components/commands/Blog';
+import { BIO } from '../data/bio';
 
 // ── Fetch & serialize content collections at build time ────
 // IMPORTANT: All data must be serialized to plain JSON before passing
@@ -65,14 +66,14 @@ const blog: BlogEntry[] = rawBlog
 
 const title = 'Joshua Mason — Portfolio';
 const description = 'Applied Scientist & AI Engineer specializing in agentic systems and search. Interactive desktop portfolio.';
-const ogImage = '/headshot-small.jpg';
+const ogImage = new URL('/headshot-small.jpg', Astro.site).href;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary Meta -->
     <title>{title}</title>
@@ -143,7 +144,36 @@ const ogImage = '/headshot-small.jpg';
 
   <body>
     <!-- Hidden h1 for screen readers and SEO crawlers -->
-    <h1 class="sr-only">Joshua Mason — Terminal Portfolio</h1>
+    <h1 class="sr-only">{title}</h1>
+
+    <noscript>
+      <div class="noscript-fallback">
+        <h2>{BIO.name} — {BIO.role}</h2>
+        <p>{BIO.summary} {BIO.education}.</p>
+
+        <h3>Projects</h3>
+        <ul>
+          {projects.map((p) => (
+            <li><a href={`/projects/${p.slug}`}>{p.title}</a> — {p.summary}</li>
+          ))}
+        </ul>
+
+        <h3>Experience</h3>
+        <ul>
+          {resume.filter((e) => e.section === 'experience').map((e) => (
+            <li>{e.title}, {e.organization} ({e.start}–{e.end ?? 'Present'})</li>
+          ))}
+        </ul>
+
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:joshuam1008@gmail.com">joshuam1008@gmail.com</a></li>
+          <li><a href="https://github.com/joshuam1008">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/joshuam1008/">LinkedIn</a></li>
+          <li><a href="/Joshua-Mason-Resume.pdf">Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </noscript>
 
     <Desktop
       resume={resume}
@@ -166,4 +196,20 @@ const ogImage = '/headshot-small.jpg';
     white-space: nowrap;
     border-width: 0;
   }
+
+  .noscript-fallback {
+    max-width: 76ch;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 6rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    line-height: 1.6;
+  }
+  .noscript-fallback h2 { color: var(--accent2); font-size: 1.3rem; margin-bottom: 0.75rem; }
+  .noscript-fallback h3 { color: var(--accent3); font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+  .noscript-fallback p { margin-bottom: 0.75rem; }
+  .noscript-fallback ul { margin-left: 1.25rem; }
+  .noscript-fallback li { margin-bottom: 0.4rem; }
+  .noscript-fallback a { color: var(--link); }
 </style>

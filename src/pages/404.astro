@@ -1,0 +1,32 @@
+---
+import '@styles/terminal.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — Joshua Mason</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" />
+    <script is:inline>
+      (function () {
+        var saved = localStorage.getItem('terminal-theme');
+        if (saved) document.documentElement.setAttribute('data-theme', saved);
+      })();
+    </script>
+  </head>
+  <body>
+    <main class="term-page">
+      <pre class="term-accent">404</pre>
+      <p><span class="term-error">bash: no such file or directory</span></p>
+      <p class="term-body" style="margin-top:0.75rem">
+        That path does not exist. Everything lives on the desktop.
+      </p>
+      <p style="margin-top:1rem"><a class="term-link" href="/">← back to desktop</a></p>
+    </main>
+  </body>
+</html>

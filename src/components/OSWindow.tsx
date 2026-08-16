@@ -27,12 +27,6 @@ export function OSWindow({
   children,
 }: OSWindowProps) {
   const wmContext = useContext(WindowManagerContext);
-  if (!wmContext) throw new Error('OSWindow must be used within WindowManagerProvider');
-
-  const { windows, closeWindow, minimizeWindow, toggleMaximize, focusWindow } = wmContext;
-
-  const win = windows.get(id);
-  if (!win) return null;
 
   const [left, setLeft] = useState(initialLeft);
   const [top, setTop] = useState(initialTop);
@@ -44,6 +38,13 @@ export function OSWindow({
   const isResizingRef = useRef(false);
   const dragStartRef = useRef({ x: 0, y: 0, startLeft: 0, startTop: 0 });
   const resizeStartRef = useRef({ x: 0, y: 0, startW: 0, startH: 0 });
+
+  if (!wmContext) throw new Error('OSWindow must be used within WindowManagerProvider');
+
+  const { windows, closeWindow, minimizeWindow, toggleMaximize, focusWindow } = wmContext;
+
+  const win = windows.get(id);
+  if (!win) return null;
 
   const onHeaderPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if ((e.target as HTMLElement).closest('.os-window-btn')) return;
@@ -66,8 +67,11 @@ export function OSWindow({
 
   const onWindowPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (isDraggingRef.current) {
-      setLeft(dragStartRef.current.startLeft + (e.clientX - dragStartRef.current.x));
-      setTop(dragStartRef.current.startTop + (e.clientY - dragStartRef.current.y));
+      const rawLeft = dragStartRef.current.startLeft + (e.clientX - dragStartRef.current.x);
+      const rawTop = dragStartRef.current.startTop + (e.clientY - dragStartRef.current.y);
+      // Keep 120px of the window and its full header on screen
+      setLeft(Math.min(Math.max(rawLeft, -width + 120), window.innerWidth - 120));
+      setTop(Math.min(Math.max(rawTop, 0), window.innerHeight - 80));
     }
     if (isResizingRef.current) {
       setWidth(Math.max(280, resizeStartRef.current.startW + (e.clientX - resizeStartRef.current.x)));
@@ -96,6 +100,8 @@ export function OSWindow({
     <div
       ref={windowRef}
       className={className}
+      role="dialog"
+      aria-label={title}
       style={{
         left: win.isMaximized ? undefined : `${left}px`,
         top: win.isMaximized ? undefined : `${top}px`,

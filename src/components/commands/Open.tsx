@@ -1,18 +1,24 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { termContext } from '../termContext';
+import type { WindowId } from '../WindowManager';
 
-const VALID_APPS = ['about', 'projects', 'blog', 'skills', 'contact'];
+const VALID_APPS: WindowId[] = ['about', 'projects', 'blog', 'skills', 'contact'];
+
+function isValidApp(name: string): name is WindowId {
+  return (VALID_APPS as string[]).includes(name);
+}
 
 const Open = () => {
   const { arg, rerender, openWindow } = useContext(termContext);
 
-  // Trigger the open on rerender (when this command was just submitted)
-  if (rerender && arg.length > 0) {
+  useEffect(() => {
+    if (!rerender || arg.length === 0) return;
     const appName = arg[0].toLowerCase();
-    if (VALID_APPS.includes(appName) && openWindow) {
+    if (isValidApp(appName) && openWindow) {
       openWindow(appName);
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!arg.length) {
     return (
@@ -26,7 +32,7 @@ const Open = () => {
   }
 
   const appName = arg[0].toLowerCase();
-  if (!VALID_APPS.includes(appName)) {
+  if (!isValidApp(appName)) {
     return (
       <div className="term-error">
         app not found: <strong>{appName}</strong>

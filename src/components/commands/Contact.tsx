@@ -8,8 +8,8 @@ const Contact: React.FC = () => {
         <span className="term-list-num">→</span>
         <div>
           <span className="term-list-title">Email  </span>
-          <a className="term-link" href="mailto:joshuamason1008@gmail.com">
-            joshuamason1008@gmail.com
+          <a className="term-link" href="mailto:joshuam1008@gmail.com">
+            joshuam1008@gmail.com
           </a>
         </div>
       </div>
@@ -31,7 +31,7 @@ const Contact: React.FC = () => {
           </a>
         </div>
       </div>
-      <p className="term-dim" style={{ marginTop: '0.75rem', fontSize: '0.85em' }}>
+      <p className="term-body" style={{ marginTop: '0.75rem', fontSize: '0.85em' }}>
         I typically respond within a day or two. Happy to connect about AI agents, agentic search, or evaluations/guardrails.
       </p>
     </div>

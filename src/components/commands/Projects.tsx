@@ -38,7 +38,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
     return (
       <div className="term-error">
         Unknown sub-command: <strong>{subCmd}</strong>
-        <div className="term-dim" style={{ marginTop: '0.25rem' }}>
+        <div className="term-body" style={{ marginTop: '0.25rem' }}>
           Usage: <span className="term-accent3">projects</span> | <span className="term-accent3">projects list</span> | <span className="term-accent3">projects go &lt;n&gt;</span>
         </div>
       </div>
@@ -51,7 +51,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
       return (
         <div className="term-error">
           Invalid project number. Use a number from 1 to {projects.length}.
-          <div className="term-dim">Usage: <span className="term-accent3">projects go &lt;n&gt;</span></div>
+          <div className="term-body">Usage: <span className="term-accent3">projects go &lt;n&gt;</span></div>
         </div>
       );
     }
@@ -71,7 +71,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
   // Default: list all projects
   return (
     <div data-testid="projects">
-      <p className="term-dim" style={{ marginBottom: '0.5rem' }}>
+      <p className="term-body" style={{ marginBottom: '0.5rem' }}>
         {projects.length} project{projects.length !== 1 ? 's' : ''}. Use <span className="term-accent3">projects go &lt;n&gt;</span> to open one.
       </p>
       {projects.map((p, i) => (
@@ -84,6 +84,9 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
               {p.tags.map((t) => <span key={t} style={{ marginRight: '0.5rem' }}>#{t}</span>)}
             </div>
             <div style={{ marginTop: '0.15rem' }}>
+              <a className="term-link" href={`/projects/${p.slug}`} style={{ marginRight: '1rem' }}>
+                Case study →
+              </a>
               {p.links.map((l) => (
                 <a key={l.label} className="term-link" href={l.href} target="_blank" rel="noreferrer" style={{ marginRight: '1rem' }}>
                   {l.label} ↗

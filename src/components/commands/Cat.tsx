@@ -7,7 +7,9 @@ const Cat = () => {
 
   if (!filesystem) return <div className="term-dim">(no filesystem)</div>;
 
-  if (!arg[0]) {
+  const args = arg.filter((a) => !a.startsWith('-'));
+
+  if (!args[0]) {
     return (
       <div className="term-error">
         usage: <strong>cat</strong> &lt;file&gt;
@@ -15,13 +17,13 @@ const Cat = () => {
     );
   }
 
-  const targetPath = normalizePath(resolvePath(arg[0], currentPath));
+  const targetPath = normalizePath(resolvePath(args[0], currentPath));
   const node = getNode(filesystem, targetPath);
 
   if (!node) {
     return (
       <div className="term-error">
-        cat: <strong>{arg[0]}</strong>: no such file or directory
+        cat: <strong>{args[0]}</strong>: no such file or directory
       </div>
     );
   }
@@ -29,7 +31,7 @@ const Cat = () => {
   if (node.type === 'dir') {
     return (
       <div className="term-error">
-        cat: <strong>{arg[0]}</strong>: is a directory
+        cat: <strong>{args[0]}</strong>: is a directory
       </div>
     );
   }
@@ -37,7 +39,7 @@ const Cat = () => {
   return (
     <div>
       {(node.content ?? '').split('\n').map((line, i) => (
-        <div key={i} className="term-dim" style={{ minHeight: '1.2em' }}>
+        <div key={i} className="term-body" style={{ minHeight: '1.2em' }}>
           {line || '\u00a0'}
         </div>
       ))}

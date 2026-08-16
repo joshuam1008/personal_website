@@ -11,7 +11,7 @@ export function ProjectsWindow({ projects }: ProjectsWindowProps) {
         {projects.map((p) => (
           <div key={p.slug} className="info-card">
             <div className="info-card-title">{p.title}</div>
-            <p style={{ fontSize: '0.9em', color: 'var(--text-dim)', marginBottom: '8px' }}>
+            <p style={{ fontSize: '0.9em', color: 'var(--text-secondary)', marginBottom: '8px' }}>
               {p.summary}
             </p>
             {p.tags && p.tags.length > 0 && (
@@ -21,22 +21,27 @@ export function ProjectsWindow({ projects }: ProjectsWindowProps) {
                 ))}
               </div>
             )}
-            {p.links && p.links.length > 0 && (
-              <div style={{ marginTop: '8px' }}>
-                {p.links.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="term-link"
-                    style={{ marginRight: '12px', fontSize: '0.85em' }}
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            )}
+            <div style={{ marginTop: '8px' }}>
+              <a
+                href={`/projects/${p.slug}`}
+                className="term-link"
+                style={{ marginRight: '12px', fontSize: '0.85em' }}
+              >
+                Case study →
+              </a>
+              {p.links && p.links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="term-link"
+                  style={{ marginRight: '12px', fontSize: '0.85em' }}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
         ))}
       </div>

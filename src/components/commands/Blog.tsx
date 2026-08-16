@@ -26,16 +26,16 @@ const Blog: React.FC<BlogProps> = ({ blog }) => {
 
   // "blog read <slug>" — open post in new tab
   useEffect(() => {
-    if (rerender && subCmd === 'read' && slugArg) {
-      window.open(`/blog/${slugArg}/`, '_blank');
-    }
+    if (!rerender || subCmd !== 'read' || !slugArg) return;
+    if (!blog.some((p) => p.slug === slugArg)) return;
+    window.open(`/blog/${slugArg}/`, '_blank');
   }, [rerender]);
 
   if (subCmd && !['list', 'read'].includes(subCmd)) {
     return (
       <div className="term-error">
         Unknown sub-command: <strong>{subCmd}</strong>
-        <div className="term-dim" style={{ marginTop: '0.25rem' }}>
+        <div className="term-body" style={{ marginTop: '0.25rem' }}>
           Usage: <span className="term-accent3">blog</span> | <span className="term-accent3">blog list</span> | <span className="term-accent3">blog read &lt;slug&gt;</span>
         </div>
       </div>
@@ -47,11 +47,15 @@ const Blog: React.FC<BlogProps> = ({ blog }) => {
       return (
         <div className="term-error">
           Please provide a post slug.
-          <div className="term-dim">Usage: <span className="term-accent3">blog read &lt;slug&gt;</span></div>
-          <div className="term-dim" style={{ marginTop: '0.25rem' }}>Available slugs:</div>
-          {blog.map((p) => (
-            <div key={p.slug} className="term-dim" style={{ paddingLeft: '1rem' }}>• {p.slug}</div>
-          ))}
+          <div className="term-body">Usage: <span className="term-accent3">blog read &lt;slug&gt;</span></div>
+          {blog.length > 0 && (
+            <>
+              <div className="term-dim" style={{ marginTop: '0.25rem' }}>Available slugs:</div>
+              {blog.map((p) => (
+                <div key={p.slug} className="term-dim" style={{ paddingLeft: '1rem' }}>• {p.slug}</div>
+              ))}
+            </>
+          )}
         </div>
       );
     }
@@ -60,20 +64,38 @@ const Blog: React.FC<BlogProps> = ({ blog }) => {
       return (
         <div className="term-error">
           Post not found: <strong>{slugArg}</strong>
-          <div className="term-dim">Available slugs:</div>
-          {blog.map((p) => (
-            <div key={p.slug} className="term-dim" style={{ paddingLeft: '1rem' }}>• {p.slug}</div>
-          ))}
+          {blog.length > 0 && (
+            <>
+              <div className="term-dim">Available slugs:</div>
+              {blog.map((p) => (
+                <div key={p.slug} className="term-dim" style={{ paddingLeft: '1rem' }}>• {p.slug}</div>
+              ))}
+            </>
+          )}
         </div>
       );
     }
     return <div className="term-dim">Opening <span className="term-accent2">{post.title}</span>...</div>;
   }
 
+  if (blog.length === 0) {
+    return (
+      <div data-testid="blog">
+        <p>No posts published yet.</p>
+        <p className="term-body" style={{ marginTop: '0.5rem' }}>
+          The first one is being written. Until then,{' '}
+          <span className="term-accent3">projects</span> has write-ups of what I've
+          built and <span className="term-accent3">contact</span> is the fastest
+          way to reach me.
+        </p>
+      </div>
+    );
+  }
+
   // Default: list all posts
   return (
     <div data-testid="blog">
-      <p className="term-dim" style={{ marginBottom: '0.5rem' }}>
+      <p className="term-body" style={{ marginBottom: '0.5rem' }}>
         {blog.length} post{blog.length !== 1 ? 's' : ''}. Use <span className="term-accent3">blog read &lt;slug&gt;</span> to open one.
       </p>
       {blog.map((p) => (

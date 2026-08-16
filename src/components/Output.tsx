@@ -60,12 +60,7 @@ const Output: React.FC<OutputProps> = ({ cmd, resume, projects, blog }) => {
     case 'cd':       return <Cd />;
     case 'neofetch': return <Neofetch />;
     default:
-      return (
-        <div className="term-error">
-          command not found: <strong>{cmd}</strong>
-          <span className="term-dim"> — type <span className="term-accent3">help</span> for available commands</span>
-        </div>
-      );
+      return null;
   }
 };
 

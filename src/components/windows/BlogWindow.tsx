@@ -5,6 +5,18 @@ type BlogWindowProps = {
 };
 
 export function BlogWindow({ blog }: BlogWindowProps) {
+  if (blog.length === 0) {
+    return (
+      <div className="info-window-body">
+        <div className="info-card">
+          <p style={{ fontSize: '0.9em', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+            No posts published yet. The first one is being written — check back soon.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="info-window-body">
       {blog.map((post) => {
@@ -19,9 +31,10 @@ export function BlogWindow({ blog }: BlogWindowProps) {
           <div key={post.slug} className="info-card">
             <div className="info-card-title">{post.title}</div>
             <div style={{ fontSize: '0.75em', color: 'var(--text-dim)', marginBottom: '6px' }}>
-              {formatted} • {post.readingTime} min read
+              {formatted}
+              {post.readingTime ? ` • ${post.readingTime}` : ''}
             </div>
-            <p style={{ fontSize: '0.9em', color: 'var(--text-dim)', marginBottom: '8px' }}>
+            <p style={{ fontSize: '0.9em', color: 'var(--text-secondary)', marginBottom: '8px' }}>
               {post.description}
             </p>
             {post.tags && post.tags.length > 0 && (
