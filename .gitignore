@@ -42,5 +42,8 @@ local_memory/
 
 # CLAUDE.md
 CLAUDE.md
+
+# machine-local Claude Code permissions (shared config lives in .claude/launch.json)
+.claude/settings.local.json
 .beads/
 .beads/
