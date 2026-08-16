@@ -63,7 +63,7 @@ const Themes: React.FC = () => {
 
   return (
     <div data-testid="themes">
-      <p className="term-dim" style={{ marginBottom: '0.5rem' }}>
+      <p className="term-body" style={{ marginBottom: '0.5rem' }}>
         Available themes. Use <span className="term-accent3">themes set &lt;name&gt;</span> to switch.
       </p>
       {THEMES.map((t) => (
@@ -77,7 +77,7 @@ const Themes: React.FC = () => {
             />
             <span className="term-accent3">{t.name}</span>
             {'  '}
-            <span className="term-dim">{t.label}</span>
+            <span className="term-body">{t.label}</span>
             {t.name === current && <span className="term-accent" style={{ marginLeft: '0.75rem' }}>← active</span>}
           </div>
         </div>

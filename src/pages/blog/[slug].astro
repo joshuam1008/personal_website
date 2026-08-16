@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import '@styles/terminal.css';
+import PageHead from '@layouts/PageHead.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter((p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{post.data.title} — Joshua Mason</title>
+    <meta name="description" content={post.data.description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <PageHead />
+  </head>
+  <body>
+    <main class="term-page">
+      <p><a class="term-link" href="/">← back to desktop</a></p>
+      <h1>{post.data.title}</h1>
+      <p class="term-body">{post.data.description}</p>
+      <p class="term-dim">
+        {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+        {post.data.readingTime ? ` · ${post.data.readingTime}` : ''}
+      </p>
+      <article class="term-prose"><Content /></article>
+    </main>
+  </body>
+</html>

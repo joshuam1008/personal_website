@@ -31,7 +31,7 @@ const Socials: React.FC = () => {
       return (
         <div className="term-error">
           Invalid number. Use 1 to {SOCIALS.length}.
-          <div className="term-dim">Usage: <span className="term-accent3">socials go &lt;n&gt;</span></div>
+          <div className="term-body">Usage: <span className="term-accent3">socials go &lt;n&gt;</span></div>
         </div>
       );
     }
@@ -40,7 +40,7 @@ const Socials: React.FC = () => {
 
   return (
     <div data-testid="socials">
-      <p className="term-dim" style={{ marginBottom: '0.5rem' }}>
+      <p className="term-body" style={{ marginBottom: '0.5rem' }}>
         Find me online. Use <span className="term-accent3">socials go &lt;n&gt;</span> to open one.
       </p>
       {SOCIALS.map((s) => (

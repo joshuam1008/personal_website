@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import '@styles/terminal.css';
+import PageHead from '@layouts/PageHead.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('projects');
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{post.data.title} — Joshua Mason</title>
+    <meta name="description" content={post.data.summary} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <PageHead />
+  </head>
+  <body>
+    <main class="term-page">
+      <p><a class="term-link" href="/">← back to desktop</a></p>
+      <h1>{post.data.title}</h1>
+      <p class="term-body">{post.data.summary}</p>
+      <p class="term-dim">
+        Launched {post.data.launchedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+      </p>
+      {post.data.tags.length > 0 && (
+        <p style="margin-top: 0.5rem">
+          {post.data.tags.map((t: string) => <span class="term-dim" style="margin-right: 0.75rem">#{t}</span>)}
+        </p>
+      )}
+      {post.data.links.length > 0 && (
+        <p style="margin-top: 0.5rem">
+          {post.data.links.map((l: { label: string; href: string }) => (
+            <a class="term-link" href={l.href} target="_blank" rel="noreferrer" style="margin-right: 1rem">
+              {l.label} ↗
+            </a>
+          ))}
+        </p>
+      )}
+      <article class="term-prose"><Content /></article>
+    </main>
+  </body>
+</html>

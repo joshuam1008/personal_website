@@ -13,9 +13,7 @@ const Cd = () => {
   const target = arg[0] ?? '~';
   const resolved = normalizePath(resolvePath(target, currentPath));
 
-  if (!filesystem) return null;
-
-  const node = getNode(filesystem, resolved);
+  const node = filesystem ? getNode(filesystem, resolved) : null;
   const isValid = !!(node && node.type === 'dir');
 
   // setCurrentPath is only provided for the latest entry, so this only fires once.
@@ -25,6 +23,8 @@ const Cd = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (!filesystem) return null;
 
   if (!isValid) {
     return (

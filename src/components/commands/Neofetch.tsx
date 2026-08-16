@@ -43,9 +43,13 @@ const Neofetch = () => {
     { label: 'Uptime', value: uptimeStr },
   ];
 
+  const rowCount = Math.max(LOGO.length, info.length);
+  const padLine = ' '.repeat(13);
+
   return (
     <div style={{ fontFamily: 'inherit', lineHeight: '1.6' }}>
-      {LOGO.map((line, i) => {
+      {Array.from({ length: rowCount }, (_, i) => {
+        const line = LOGO[i] ?? padLine;
         const row = info[i];
         return (
           <div key={i} style={{ display: 'flex', gap: '1.5rem' }}>

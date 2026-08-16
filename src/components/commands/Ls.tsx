@@ -1,26 +1,27 @@
 import { useContext } from 'react';
 import { termContext } from '../termContext';
-import { resolvePath, normalizePath, getNode } from '../../lib/filesystem';
+import { resolvePath, normalizePath, getNode, stripFlags } from '../../lib/filesystem';
 
 const Ls = () => {
   const { arg, currentPath = '/home/visitor', filesystem } = useContext(termContext);
 
   if (!filesystem) return <div className="term-dim">(no filesystem)</div>;
 
-  const targetRaw = arg[0] ?? currentPath;
+  const args = stripFlags(arg);
+  const targetRaw = args[0] ?? currentPath;
   const targetPath = normalizePath(resolvePath(targetRaw, currentPath));
   const node = getNode(filesystem, targetPath);
 
   if (!node) {
     return (
       <div className="term-error">
-        ls: <strong>{arg[0] ?? '.'}</strong>: no such file or directory
+        ls: <strong>{args[0] ?? '.'}</strong>: no such file or directory
       </div>
     );
   }
 
   if (node.type === 'file') {
-    return <div className="term-dim">{arg[0]}</div>;
+    return <div className="term-dim">{args[0]}</div>;
   }
 
   const entries = Object.entries(node.children ?? {});

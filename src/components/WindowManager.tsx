@@ -1,4 +1,4 @@
-import { createContext, useCallback, useState } from 'react';
+import { createContext, useCallback, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 export type WindowId =
@@ -52,20 +52,17 @@ export function WindowManagerProvider({ children }: WindowManagerProviderProps) 
     return m;
   });
 
-  const [nextZIndex, setNextZIndex] = useState(3);
+  const zCounter = useRef(3);
 
-  const openWindow = useCallback(
-    (id: WindowId) => {
-      setWindows((prev) => {
-        const updated = new Map(prev);
-        const win = updated.get(id);
-        if (win) updated.set(id, { ...win, isOpen: true, isMinimized: false, zIndex: nextZIndex });
-        return updated;
-      });
-      setNextZIndex((z) => z + 1);
-    },
-    [nextZIndex]
-  );
+  const openWindow = useCallback((id: WindowId) => {
+    const z = ++zCounter.current;
+    setWindows((prev) => {
+      const updated = new Map(prev);
+      const win = updated.get(id);
+      if (win) updated.set(id, { ...win, isOpen: true, isMinimized: false, zIndex: z });
+      return updated;
+    });
+  }, []);
 
   const closeWindow = useCallback((id: WindowId) => {
     setWindows((prev) => {
@@ -94,18 +91,15 @@ export function WindowManagerProvider({ children }: WindowManagerProviderProps) 
     });
   }, []);
 
-  const focusWindow = useCallback(
-    (id: WindowId) => {
-      setWindows((prev) => {
-        const updated = new Map(prev);
-        const win = updated.get(id);
-        if (win && win.isOpen) updated.set(id, { ...win, zIndex: nextZIndex });
-        return updated;
-      });
-      setNextZIndex((z) => z + 1);
-    },
-    [nextZIndex]
-  );
+  const focusWindow = useCallback((id: WindowId) => {
+    const z = ++zCounter.current;
+    setWindows((prev) => {
+      const updated = new Map(prev);
+      const win = updated.get(id);
+      if (win && win.isOpen) updated.set(id, { ...win, zIndex: z });
+      return updated;
+    });
+  }, []);
 
   const value: WindowManagerContextValue = {
     windows,

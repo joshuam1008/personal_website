@@ -1,0 +1,31 @@
+---
+// Shared <head> boilerplate: font loading + the pre-paint theme-restore
+// script. Used by every page so font strategy and the theme key can't drift
+// between index.astro and the standalone content routes.
+export interface Props {
+  fonts?: string; // Google Fonts "family" query segment(s)
+}
+
+const { fonts = 'IBM+Plex+Mono:wght@400;500;700' } = Astro.props;
+const fontHref = `https://fonts.googleapis.com/css2?family=${fonts}&display=swap`;
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="preload"
+  href={fontHref}
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript>
+  <link href={fontHref} rel="stylesheet" />
+</noscript>
+
+<!-- Apply saved theme before first paint to avoid flash -->
+<script is:inline>
+  (function () {
+    var saved = localStorage.getItem('terminal-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  })();
+</script>

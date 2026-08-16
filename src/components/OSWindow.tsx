@@ -3,6 +3,11 @@ import type { ReactNode } from 'react';
 import { WindowManagerContext } from './WindowManager';
 import type { WindowId } from './WindowManager';
 
+// Vertical chrome (top status bar + bottom taskbar) a window must stay clear
+// of, both when it's placed initially (Desktop.tsx's cascade()) and while
+// being dragged (below). Kept in one place so the two never drift apart.
+export const WINDOW_CHROME_RESERVE = 80;
+
 type OSWindowProps = {
   id: WindowId;
   title: string;
@@ -27,12 +32,6 @@ export function OSWindow({
   children,
 }: OSWindowProps) {
   const wmContext = useContext(WindowManagerContext);
-  if (!wmContext) throw new Error('OSWindow must be used within WindowManagerProvider');
-
-  const { windows, closeWindow, minimizeWindow, toggleMaximize, focusWindow } = wmContext;
-
-  const win = windows.get(id);
-  if (!win) return null;
 
   const [left, setLeft] = useState(initialLeft);
   const [top, setTop] = useState(initialTop);
@@ -42,8 +41,15 @@ export function OSWindow({
   const windowRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
   const isResizingRef = useRef(false);
-  const dragStartRef = useRef({ x: 0, y: 0, startLeft: 0, startTop: 0 });
+  const dragStartRef = useRef({ x: 0, y: 0, startLeft: 0, startTop: 0, viewportW: 0, viewportH: 0 });
   const resizeStartRef = useRef({ x: 0, y: 0, startW: 0, startH: 0 });
+
+  if (!wmContext) throw new Error('OSWindow must be used within WindowManagerProvider');
+
+  const { windows, closeWindow, minimizeWindow, toggleMaximize, focusWindow } = wmContext;
+
+  const win = windows.get(id);
+  if (!win) return null;
 
   const onHeaderPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if ((e.target as HTMLElement).closest('.os-window-btn')) return;
@@ -51,7 +57,14 @@ export function OSWindow({
 
     isDraggingRef.current = true;
     windowRef.current?.setPointerCapture(e.pointerId);
-    dragStartRef.current = { x: e.clientX, y: e.clientY, startLeft: left, startTop: top };
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      startLeft: left,
+      startTop: top,
+      viewportW: window.innerWidth,
+      viewportH: window.innerHeight,
+    };
   };
 
   const onResizerPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -66,8 +79,11 @@ export function OSWindow({
 
   const onWindowPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (isDraggingRef.current) {
-      setLeft(dragStartRef.current.startLeft + (e.clientX - dragStartRef.current.x));
-      setTop(dragStartRef.current.startTop + (e.clientY - dragStartRef.current.y));
+      const rawLeft = dragStartRef.current.startLeft + (e.clientX - dragStartRef.current.x);
+      const rawTop = dragStartRef.current.startTop + (e.clientY - dragStartRef.current.y);
+      // Keep 120px of the window and its full header on screen
+      setLeft(Math.min(Math.max(rawLeft, -width + 120), dragStartRef.current.viewportW - 120));
+      setTop(Math.min(Math.max(rawTop, 0), dragStartRef.current.viewportH - WINDOW_CHROME_RESERVE));
     }
     if (isResizingRef.current) {
       setWidth(Math.max(280, resizeStartRef.current.startW + (e.clientX - resizeStartRef.current.x)));
@@ -96,6 +112,8 @@ export function OSWindow({
     <div
       ref={windowRef}
       className={className}
+      role="dialog"
+      aria-label={title}
       style={{
         left: win.isMaximized ? undefined : `${left}px`,
         top: win.isMaximized ? undefined : `${top}px`,

@@ -16,7 +16,7 @@ interface ResumeProps {
   resume: ResumeEntry[];
 }
 
-function formatDate(iso: string): string {
+export function formatDate(iso: string): string {
   // iso is "2024-05" or "2024-08"
   const [year, month] = iso.split('-');
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -98,7 +98,7 @@ const Resume: React.FC<ResumeProps> = ({ resume }) => {
               <div className="term-resume-title">{e.title}</div>
               <div className="term-resume-org">{e.organization}</div>
               {e.bullets.map((b, j) => (
-                <div key={j} className="term-dim" style={{ fontSize: '0.9em', marginTop: '0.1rem' }}>• {b}</div>
+                <div key={j} className="term-body" style={{ fontSize: '0.9em', marginTop: '0.1rem' }}>• {b}</div>
               ))}
             </div>
           ))}

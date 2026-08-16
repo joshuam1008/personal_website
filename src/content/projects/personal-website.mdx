@@ -1,30 +1,30 @@
 ---
 title: "Terminal Portfolio"
-summary: "An interactive terminal emulator portfolio blending Nostalgic CRT aesthetics with modern React."
-heroImage: ../../assets/blog-placeholder-4.jpg
-heroImageAlt: "Terminal emulator interface"
+summary: "An interactive simulated desktop OS portfolio — a window manager, a virtual filesystem, and a terminal as one of six apps."
 launchedAt: 2026-03-14
 featured: true
-tags: ["astro", "react", "tailwind"]
+tags: ["astro", "react", "typescript"]
 links:
   - label: "Source"
     href: "https://github.com/joshuam1008/personal_website"
 sortOrder: 1
 ---
 
-This portfolio completely reimagines a standard website as a fully interactive Unix-style terminal emulator. Built using an Astro static shell that hydrates a pure React terminal engine, the site delivers a unique, nostalgic experience without sacrificing modern maintainability or SEO.
+This portfolio reimagines a standard website as a simulated desktop operating system. Built on an Astro static shell that hydrates a single React island, the site delivers a boot sequence, a window manager, and a virtual filesystem, without sacrificing modern maintainability or SEO.
 
 ## Features
 
-- **Custom Terminal Engine**: The core `Terminal.tsx` component handles keyboard event loops, ArrowUp/ArrowDown command history, Tab-completion, and dynamic output routing.
-- **16 Internal Commands**: Visitors can run commands like `resume`, `projects`, `skills`, and `socials` to view cleanly formatted output.
-- **Pure CSS Styling**: Ditching external UI libraries, the site relies entirely on vanilla CSS and custom properties to achieve a CRT scanline effect, text glow plugins, and dynamic color switching. 
-- **4 Live Themes**: Users can run `themes set amber` or `dracula` to instantly swap the root color variables, persisting their choices via `localStorage`.
+- **Window Manager**: `WindowManager.tsx` and `OSWindow.tsx` handle z-ordering, focus, drag, resize, minimize, and maximize for six independent windows — a top status bar and bottom taskbar tie it together.
+- **Virtual Filesystem**: `src/lib/filesystem.ts` builds a Unix-style tree from the same content collections that feed the windows, so `ls`, `cd`, `cat`, and `pwd` never go stale.
+- **Terminal as One App Among Six**: The original terminal — with its own command history, Tab-completion, and `open <app>` bridge into the window system — now lives inside its own window alongside About, Projects, Blog, Skills, and Contact.
+- **20 Internal Commands**: Visitors can run commands like `resume`, `projects`, `neofetch`, `ls`, and `cat` to view cleanly formatted output.
+- **Pure CSS Styling**: No external UI libraries — vanilla CSS and custom properties drive a CRT scanline effect, a token-based theme system, and the OS chrome.
+- **4 Live Themes**: Running `themes set amber` or `dracula` instantly swaps the root color variables, persisting the choice via `localStorage`.
 
 ## Architecture
 
-To ensure the content remains easy to update, the terminal commands read directly from Astro's data layer:
-- **MDX Collections**: `blog` and `projects` are written in MDX. Astro statically parses these at build time and passes the frontmatter into the React terminal component as props.
-- **JSON Timelines**: The `resume` command dynamically parses standalone JSON files representing each career stop, filtering them smoothly when users run subcommands like `resume experience`.
+To keep content easy to update, both the windows and the virtual filesystem read from the same data layer:
+- **MDX Collections**: `blog` and `projects` are written in MDX. Astro statically parses these at build time and passes the frontmatter into the React island as props.
+- **JSON Timelines**: The `resume` command and the About window both parse standalone JSON files representing each career stop, filtering smoothly on subcommands like `resume experience`.
 
 The result is a highly engaging, interactive landing page that still builds to a lightning-fast static directory hosted for free on GitHub Pages.

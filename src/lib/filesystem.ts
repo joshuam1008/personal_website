@@ -1,5 +1,6 @@
 import { SKILLS } from "../data/skills";
 import { SOCIALS } from "../data/socials";
+import { BIO } from "../data/bio";
 
 // ── Types ────────────────────────────────────────────────────
 export type FileSystemNode = {
@@ -24,6 +25,13 @@ type BlogData = {
   pubDate: string;
   tags?: string[];
 };
+
+// ── Arg utilities ────────────────────────────────────────────
+// Shared by Ls/Cat (to ignore -flag args on submit) and Terminal's tab
+// completion (so it stays consistent with what those commands accept).
+export function stripFlags(args: string[]): string[] {
+  return args.filter((a) => !a.startsWith('-'));
+}
 
 // ── Path utilities ────────────────────────────────────────────
 export function resolvePath(target: string, currentPath: string): string {
@@ -86,15 +94,12 @@ export function buildFilesystem(
   ).join("\n");
 
   const aboutContent = [
-    "Joshua Mason — Applied Scientist & AI Engineer",
-    "Location: MSP, MN",
+    `${BIO.name} — ${BIO.role}`,
+    `Location: ${BIO.location}`,
     "",
-    "Specializing in agentic systems, search, and decision-making.",
-    "Experienced in building production systems for search relevance,",
-    "retrieval augmentation, and AI.",
+    BIO.summary,
     "",
-    "Passionate about research implementation, especially around",
-    "multi-agent orchestration and search infrastructure.",
+    BIO.education,
   ].join("\n");
 
   const blogChildren: Record<string, FileSystemNode> = blog.reduce(

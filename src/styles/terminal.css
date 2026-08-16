@@ -9,7 +9,8 @@
   --bg:          #0d1117;
   --surface:     #161b22;
   --text:        #c9d1d9;
-  --text-dim:    #6e7681;
+  --text-dim:       #838991;  /* metadata only — WCAG AA (4.6:1) incl. scanline overlay. Do not "round" this. */
+  --text-secondary: #a6adb5;  /* prose color — WCAG AAA (7:1) incl. scanline overlay */
   --accent:      #39d353;     /* prompt username */
   --accent2:     #58a6ff;     /* hostname */
   --accent3:     #f0883e;     /* command highlight */
@@ -25,7 +26,8 @@
   --bg:          #1a1200;
   --surface:     #231900;
   --text:        #e8d8b0;
-  --text-dim:    #7a6a44;
+  --text-dim:       #978a6b;
+  --text-secondary: #bcae8b;
   --accent:      #ffb000;
   --accent2:     #ff8c00;
   --accent3:     #ffd700;
@@ -41,7 +43,8 @@
   --bg:          #282a36;
   --surface:     #343746;
   --text:        #f8f8f2;
-  --text-dim:    #6272a4;
+  --text-dim:       #8297d9;
+  --text-secondary: #a3bdff;
   --accent:      #50fa7b;
   --accent2:     #8be9fd;
   --accent3:     #ffb86c;
@@ -57,7 +60,8 @@
   --bg:          #000000;
   --surface:     #001100;
   --text:        #00ff41;
-  --text-dim:    #007a1f;
+  --text-dim:       #009d28;
+  --text-secondary: #00c632;
   --accent:      #00ff41;
   --accent2:     #00dd37;
   --accent3:     #00bb2e;
@@ -76,9 +80,25 @@
   padding: 0;
 }
 
-#terminal-root {
+html, body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 15px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Type system:
+   - IBM Plex Mono  — body default, terminal, anything shell-like
+   - JetBrains Mono — OS chrome only: top bar, window titles, taskbar, card titles
+   - system-ui      — window body content (.info-window-body), for readable prose
+   Do not introduce a fourth. Do not let anything inherit an unset family. */
 
 /* ── CRT Scanline overlay ─────────────────────────────────── */
 #terminal-root::after {
@@ -123,6 +143,13 @@
   padding: 0.2rem 0;
 }
 
+/* The input is borderless; ring the prompt row instead */
+.term-input-row:focus-within {
+  outline: 1px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 .term-input {
   flex: 1;
   background: transparent;
@@ -155,6 +182,7 @@
 .prompt-user     { color: var(--accent);  font-weight: 700; }
 .prompt-at       { color: var(--text); }
 .prompt-host     { color: var(--accent2); font-weight: 700; }
+.prompt-colon    { color: var(--text-dim); }
 .prompt-path     { color: var(--text-dim); }
 .prompt-dollar   { color: var(--text); }
 
@@ -168,10 +196,16 @@
 .term-error    { color: var(--error); }
 .term-link     { color: var(--link); text-decoration: underline; cursor: pointer; }
 .term-link:hover { opacity: 0.8; }
+.term-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
 .term-accent   { color: var(--accent); }
 .term-accent2  { color: var(--accent2); }
 .term-accent3  { color: var(--accent3); }
 .term-dim      { color: var(--text-dim); }
+.term-body     { color: var(--text-secondary); }
 
 /* ── Tab completion hints ─────────────────────────────────── */
 .term-hints {
@@ -231,9 +265,8 @@
 }
 
 .term-list-num  { color: var(--accent3); font-weight: 700; }
-.term-list-body {}
 .term-list-title { color: var(--accent2); font-weight: 500; }
-.term-list-desc  { color: var(--text-dim); font-size: 0.9em; }
+.term-list-desc  { color: var(--text-secondary); font-size: 1em; }
 .term-list-tags  { color: var(--text-dim); font-size: 0.85em; }
 
 /* ── Resume entries ───────────────────────────────────────── */
@@ -280,6 +313,33 @@
   border-radius: 2px;
 }
 
+/* ── Standalone content pages (blog posts, project case studies) ── */
+.term-page {
+  max-width: 76ch;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 6rem;
+}
+.term-page h1 {
+  color: var(--accent2);
+  font-size: 1.5rem;
+  margin: 0.75rem 0 0.25rem;
+}
+.term-prose { margin-top: 1.5rem; }
+.term-prose h2 { color: var(--accent3); font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+.term-prose h3 { color: var(--accent3); font-size: 1rem;   margin: 1.25rem 0 0.5rem; }
+.term-prose p  { margin-bottom: 0.85rem; }
+.term-prose ul, .term-prose ol { margin: 0 0 0.85rem 1.25rem; }
+.term-prose li { margin-bottom: 0.3rem; }
+.term-prose code { background: var(--surface); padding: 0.1em 0.35em; border-radius: 3px; }
+.term-prose pre {
+  background: var(--surface);
+  padding: 0.85rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 0.85rem;
+}
+.term-prose a { color: var(--link); }
+
 /* ── Mobile ───────────────────────────────────────────────── */
 @media (max-width: 640px) {
   body { font-size: 13px; }
@@ -295,11 +355,17 @@
   .term-ascii         { display: none; }
   .term-ascii-mobile  { display: block; }
 
+  .prompt-user,
+  .prompt-at,
   .prompt-host,
-  .prompt-path,
-  .prompt-at { display: none; }
+  .prompt-colon { display: none; }
 
   .term-help-row        { grid-template-columns: 10ch 1fr; }
   .term-skills-row      { grid-template-columns: 1fr; }
   .term-resume-entry    { padding-left: 0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term-cursor { animation: none; opacity: 1; }
+  #terminal-root { scroll-behavior: auto; }
 }
