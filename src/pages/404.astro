@@ -1,5 +1,6 @@
 ---
 import '@styles/terminal.css';
+import PageHead from '@layouts/PageHead.astro';
 ---
 
 <!doctype html>
@@ -9,15 +10,7 @@ import '@styles/terminal.css';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>404 — Joshua Mason</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" />
-    <script is:inline>
-      (function () {
-        var saved = localStorage.getItem('terminal-theme');
-        if (saved) document.documentElement.setAttribute('data-theme', saved);
-      })();
-    </script>
+    <PageHead />
   </head>
   <body>
     <main class="term-page">

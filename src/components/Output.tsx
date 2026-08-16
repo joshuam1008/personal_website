@@ -60,7 +60,15 @@ const Output: React.FC<OutputProps> = ({ cmd, resume, projects, blog }) => {
     case 'cd':       return <Cd />;
     case 'neofetch': return <Neofetch />;
     default:
-      return null;
+      // Unreachable today — Terminal.tsx gates on VALID_CMDS before rendering
+      // Output — but kept as a safety net in case a command is registered in
+      // commands.ts without a matching case here.
+      return (
+        <div className="term-error">
+          command not found: <strong>{cmd}</strong>
+          <span className="term-dim"> — type <span className="term-accent3">help</span> for available commands</span>
+        </div>
+      );
   }
 };
 

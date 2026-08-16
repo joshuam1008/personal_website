@@ -246,6 +246,13 @@ const Terminal: React.FC<TerminalProps> = ({ resume, projects, blog }) => {
           const baseCmd = tokens[0].toLowerCase();
           const subCmd = tokens[1].toLowerCase();
 
+          // e.g. "ls -la " — no path typed yet, just a flag; list cwd like plain "ls " does
+          if (['cat', 'cd', 'ls', 'open'].includes(baseCmd) && subCmd.startsWith('-')) {
+            const dirNode = getNode(filesystem, currentPath);
+            setHints(dirNode?.type === 'dir' && dirNode.children ? Object.keys(dirNode.children) : []);
+            return;
+          }
+
           let options: string[] = [];
           if (baseCmd === 'themes' && subCmd === 'set') {
             options = THEMES.map((t) => t.name);

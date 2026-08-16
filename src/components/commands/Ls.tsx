@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { termContext } from '../termContext';
-import { resolvePath, normalizePath, getNode } from '../../lib/filesystem';
+import { resolvePath, normalizePath, getNode, stripFlags } from '../../lib/filesystem';
 
 const Ls = () => {
   const { arg, currentPath = '/home/visitor', filesystem } = useContext(termContext);
 
   if (!filesystem) return <div className="term-dim">(no filesystem)</div>;
 
-  const args = arg.filter((a) => !a.startsWith('-'));
+  const args = stripFlags(arg);
   const targetRaw = args[0] ?? currentPath;
   const targetPath = normalizePath(resolvePath(targetRaw, currentPath));
   const node = getNode(filesystem, targetPath);

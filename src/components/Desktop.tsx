@@ -4,7 +4,7 @@ import { BootScreen } from './BootScreen';
 import { TopTaskbar } from './TopTaskbar';
 import { BottomTaskbar } from './BottomTaskbar';
 import { DesktopIcon } from './DesktopIcon';
-import { OSWindow } from './OSWindow';
+import { OSWindow, WINDOW_CHROME_RESERVE } from './OSWindow';
 import Terminal from './Terminal';
 import { AboutWindow } from './windows/AboutWindow';
 import { ProjectsWindow } from './windows/ProjectsWindow';
@@ -38,7 +38,7 @@ function cascade(index: number, w: number, h: number) {
   const step = 32;
   return {
     initialLeft: Math.max(16, Math.min(120 + index * step, availW - w - 16)),
-    initialTop: Math.max(16, Math.min(64 + index * step, availH - h - 100)), // 100 = both bars
+    initialTop: Math.max(16, Math.min(64 + index * step, availH - h - WINDOW_CHROME_RESERVE)),
   };
 }
 

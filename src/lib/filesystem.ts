@@ -26,6 +26,13 @@ type BlogData = {
   tags?: string[];
 };
 
+// ── Arg utilities ────────────────────────────────────────────
+// Shared by Ls/Cat (to ignore -flag args on submit) and Terminal's tab
+// completion (so it stays consistent with what those commands accept).
+export function stripFlags(args: string[]): string[] {
+  return args.filter((a) => !a.startsWith('-'));
+}
+
 // ── Path utilities ────────────────────────────────────────────
 export function resolvePath(target: string, currentPath: string): string {
   if (!target || target === "~") return "/home/visitor";

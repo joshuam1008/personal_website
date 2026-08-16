@@ -40,10 +40,15 @@ export function BootScreen({ onComplete }: BootScreenProps) {
   const [progress, setProgress] = useState(0);
   const [done, setDone] = useState(false);
   const finishedRef = useRef(false);
+  // BootScreen never unmounts (Desktop.tsx only toggles a CSS class), so effect
+  // cleanup alone never runs the teardown below — finish() must trigger it directly.
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   const finish = useCallback(() => {
     if (finishedRef.current) return;
     finishedRef.current = true;
+    cleanupRef.current?.();
+    cleanupRef.current = null;
     markBootSeen();
     setDone(true);
     onComplete();
@@ -61,7 +66,9 @@ export function BootScreen({ onComplete }: BootScreenProps) {
       setDisplayedLines(BOOT_LINES);
       setProgress(100);
       const t = setTimeout(finish, 300);
-      return () => clearTimeout(t);
+      const cleanup = () => clearTimeout(t);
+      cleanupRef.current = cleanup;
+      return cleanup;
     }
 
     const lineTimer = setInterval(() => {
@@ -85,12 +92,14 @@ export function BootScreen({ onComplete }: BootScreenProps) {
     window.addEventListener('keydown', skipHandler);
     window.addEventListener('pointerdown', skipHandler);
 
-    return () => {
+    const cleanup = () => {
       clearInterval(lineTimer);
       clearInterval(progressTimer);
       window.removeEventListener('keydown', skipHandler);
       window.removeEventListener('pointerdown', skipHandler);
     };
+    cleanupRef.current = cleanup;
+    return cleanup;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [skip]);
 

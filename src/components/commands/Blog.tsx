@@ -18,6 +18,18 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+const AvailableSlugs: React.FC<{ blog: BlogEntry[] }> = ({ blog }) => {
+  if (blog.length === 0) return null;
+  return (
+    <>
+      <div className="term-dim" style={{ marginTop: '0.25rem' }}>Available slugs:</div>
+      {blog.map((p) => (
+        <div key={p.slug} className="term-dim" style={{ paddingLeft: '1rem' }}>• {p.slug}</div>
+      ))}
+    </>
+  );
+};
+
 const Blog: React.FC<BlogProps> = ({ blog }) => {
   const { arg, rerender } = useContext(termContext);
 
@@ -48,14 +60,7 @@ const Blog: React.FC<BlogProps> = ({ blog }) => {
         <div className="term-error">
           Please provide a post slug.
           <div className="term-body">Usage: <span className="term-accent3">blog read &lt;slug&gt;</span></div>
-          {blog.length > 0 && (
-            <>
-              <div className="term-dim" style={{ marginTop: '0.25rem' }}>Available slugs:</div>
-              {blog.map((p) => (
-                <div key={p.slug} className="term-dim" style={{ paddingLeft: '1rem' }}>• {p.slug}</div>
-              ))}
-            </>
-          )}
+          <AvailableSlugs blog={blog} />
         </div>
       );
     }
@@ -64,14 +69,7 @@ const Blog: React.FC<BlogProps> = ({ blog }) => {
       return (
         <div className="term-error">
           Post not found: <strong>{slugArg}</strong>
-          {blog.length > 0 && (
-            <>
-              <div className="term-dim">Available slugs:</div>
-              {blog.map((p) => (
-                <div key={p.slug} className="term-dim" style={{ paddingLeft: '1rem' }}>• {p.slug}</div>
-              ))}
-            </>
-          )}
+          <AvailableSlugs blog={blog} />
         </div>
       );
     }

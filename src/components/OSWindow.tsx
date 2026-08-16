@@ -3,6 +3,11 @@ import type { ReactNode } from 'react';
 import { WindowManagerContext } from './WindowManager';
 import type { WindowId } from './WindowManager';
 
+// Vertical chrome (top status bar + bottom taskbar) a window must stay clear
+// of, both when it's placed initially (Desktop.tsx's cascade()) and while
+// being dragged (below). Kept in one place so the two never drift apart.
+export const WINDOW_CHROME_RESERVE = 80;
+
 type OSWindowProps = {
   id: WindowId;
   title: string;
@@ -36,7 +41,7 @@ export function OSWindow({
   const windowRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
   const isResizingRef = useRef(false);
-  const dragStartRef = useRef({ x: 0, y: 0, startLeft: 0, startTop: 0 });
+  const dragStartRef = useRef({ x: 0, y: 0, startLeft: 0, startTop: 0, viewportW: 0, viewportH: 0 });
   const resizeStartRef = useRef({ x: 0, y: 0, startW: 0, startH: 0 });
 
   if (!wmContext) throw new Error('OSWindow must be used within WindowManagerProvider');
@@ -52,7 +57,14 @@ export function OSWindow({
 
     isDraggingRef.current = true;
     windowRef.current?.setPointerCapture(e.pointerId);
-    dragStartRef.current = { x: e.clientX, y: e.clientY, startLeft: left, startTop: top };
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      startLeft: left,
+      startTop: top,
+      viewportW: window.innerWidth,
+      viewportH: window.innerHeight,
+    };
   };
 
   const onResizerPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -70,8 +82,8 @@ export function OSWindow({
       const rawLeft = dragStartRef.current.startLeft + (e.clientX - dragStartRef.current.x);
       const rawTop = dragStartRef.current.startTop + (e.clientY - dragStartRef.current.y);
       // Keep 120px of the window and its full header on screen
-      setLeft(Math.min(Math.max(rawLeft, -width + 120), window.innerWidth - 120));
-      setTop(Math.min(Math.max(rawTop, 0), window.innerHeight - 80));
+      setLeft(Math.min(Math.max(rawLeft, -width + 120), dragStartRef.current.viewportW - 120));
+      setTop(Math.min(Math.max(rawTop, 0), dragStartRef.current.viewportH - WINDOW_CHROME_RESERVE));
     }
     if (isResizingRef.current) {
       setWidth(Math.max(280, resizeStartRef.current.startW + (e.clientX - resizeStartRef.current.x)));
